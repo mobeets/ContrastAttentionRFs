@@ -20,6 +20,7 @@ pixelsPerElem = [16 6];
 stimContrast = [1.0 0.2];
 
 opts = struct(...
+    'randSeed', randi(1e3), ...
     'ntrials', ntrials, ...
     'trialLengthSec', trialLengthSec, ...
     'pulsesPerSec', pulsesPerSec, ...
@@ -44,8 +45,8 @@ optsLowContrastFineGrid.stimContrast = stimContrast(2);
 %% save all
 
 outdir = 'stim_mats';
-makeTrials(optsHighContrastCoarseGrid, outdir, 'hCont_cGrid_');
-makeTrials(optsHighContrastFineGrid, outdir, 'hCont_fGrid_');
-makeTrials(optsLowContrastCoarseGrid, outdir, 'lCont_cGrid_');
-makeTrials(optsLowContrastFineGrid, outdir, 'lCont_fGrid_');
+X1 = makeTrials(optsHighContrastCoarseGrid, outdir, 'hCont_cGrid_');
+X2 = makeTrials(optsHighContrastFineGrid, outdir, 'hCont_fGrid_');
+X3 = makeTrials(optsLowContrastCoarseGrid, outdir, 'lCont_cGrid_');
+X4 = makeTrials(optsLowContrastFineGrid, outdir, 'lCont_fGrid_');
 

@@ -6,6 +6,9 @@ nrows = opts.shape(2);
 
 % randomly select one of three values per grid location: 
 %   black, gray, white
+if isfield(opts, 'randSeed')
+    rng(opts.randSeed);
+end
 ix = rand(npulses*ncols*nrows,1);
 X = nan(size(ix));
 X(ix <= 1/3) = -1;
