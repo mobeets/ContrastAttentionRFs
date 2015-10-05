@@ -6,7 +6,7 @@ end
 colormap(gray);
 for ii = 1:numel(X)
     imagesc(X{ii});
-    caxis([0 256]);
+    caxis([0 255]);
     axis off;
     pause(pauseTime);
 end

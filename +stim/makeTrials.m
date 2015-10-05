@@ -10,8 +10,15 @@ if nargin < 4
     expTiming = false;
 end
 
+rng('shuffle');
+if isfield(opts, 'randSeed')
+    if ~isnan(opts.randSeed)
+        rng(opts.randSeed);
+    end
+end
+
 if expTiming
-    ts = drawTruncExpStimLength(opts.t0, opts.t1, opts.tMean, ...
+    ts = stim.drawTruncExpStimLength(opts.t0, opts.t1, opts.tMean, ...
         opts.ntrials);
 else
     ts = opts.trialLengthSec*ones(opts.ntrials, 1);
@@ -21,7 +28,7 @@ end
 X = cell(opts.ntrials,1);
 for ii = 1:opts.ntrials    
     opts.npulses = round(ts(ii)*opts.pulsesPerSec);
-    X{ii} = makeTrial(opts);
+    X{ii} = stim.makeTrial(opts);
 end
 
 if isempty(outdir)
@@ -32,7 +39,7 @@ end
 for ii = 1:opts.ntrials
     outfile = fullfile(outdir, [prefix num2str(ii)]);
     mov = X{ii};
-    save(outfile, 'mov');
+    save(outfile, 'mov', 'opts');
 end
 
 end

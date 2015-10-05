@@ -20,7 +20,7 @@ pixelsPerElem = [16 6];
 stimContrast = [1.0 0.2];
 
 opts = struct(...
-    'randSeed', randi(1e3), ...
+    'randSeed', nan, ...
     'ntrials', ntrials, ...
     'trialLengthSec', trialLengthSec, ...
     'pulsesPerSec', pulsesPerSec, ...
@@ -44,9 +44,22 @@ optsLowContrastFineGrid.stimContrast = stimContrast(2);
 
 %% save all
 
-outdir = 'stim_mats';
-X1 = makeTrials(optsHighContrastCoarseGrid, outdir, 'hCont_cGrid_');
-X2 = makeTrials(optsHighContrastFineGrid, outdir, 'hCont_fGrid_');
-X3 = makeTrials(optsLowContrastCoarseGrid, outdir, 'lCont_cGrid_');
-X4 = makeTrials(optsLowContrastFineGrid, outdir, 'lCont_fGrid_');
+outdir = 'stim_mats2';
 
+seed = randi(1e5);
+optsHighContrastCoarseGrid.randSeed = seed;
+optsLowContrastCoarseGrid.randSeed = seed;
+
+X1 = stim.makeTrials(optsHighContrastCoarseGrid, outdir, 'hCont_cGrid_');
+X3 = stim.remakeTrialsNewContrast(X1, optsLowContrastCoarseGrid, ...
+    outdir, 'lCont_cGrid_');
+
+rng('shuffle');
+seed = randi(1e5);
+optsHighContrastFineGrid.randSeed = seed;
+optsLowContrastFineGrid.randSeed = seed;
+
+X2 = stim.makeTrials(optsHighContrastFineGrid, outdir, 'hCont_fGrid_');
+X4 = stim.remakeTrialsNewContrast(X2, optsLowContrastFineGrid, ...
+    outdir, 'lCont_fGrid_');
+rng('shuffle');
