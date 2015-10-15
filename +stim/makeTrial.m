@@ -6,11 +6,15 @@ nrows = opts.shape(2);
 
 % randomly select one of three values per grid location: 
 %   black, gray, white
-ix = rand(npulses*ncols*nrows,1);
-X = nan(size(ix));
-X(ix <= 1/3) = -1;
-X(1/3 < ix & ix <= 2/3) = 0;
-X(ix > 2/3) = 1;
+if isfield(opts, 'stimDist') && strcmpi(opts.stimDist, 'gauss')
+    X = randn(npulses*ncols*nrows,1);
+else
+    ix = rand(npulses*ncols*nrows,1);
+    X = nan(size(ix));
+    X(ix <= 1/3) = -1;
+    X(1/3 < ix & ix <= 2/3) = 0;
+    X(ix > 2/3) = 1;
+end
 
 if isfield(opts, 'stimContrast') && isfield(opts, 'stimOffset') % [0, 1]
     X = opts.stimOffset*opts.stimContrast*X;

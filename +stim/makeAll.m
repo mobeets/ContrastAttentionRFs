@@ -42,9 +42,13 @@ optsLowContrastCoarseGrid.stimContrast = stimContrast(2);
 optsLowContrastFineGrid = optsHighContrastFineGrid;
 optsLowContrastFineGrid.stimContrast = stimContrast(2);
 
+optsGaussCoarseGrid = optsHighContrastCoarseGrid;
+optsGaussCoarseGrid.stimDist = 'gauss';
+optsGaussCoarseGrid.stimContrast = stimContrast(2);
+
 %% save all
 
-outdir = 'stim_mats2';
+outdir = 'stim_mats';
 
 seed = randi(1e5);
 optsHighContrastCoarseGrid.randSeed = seed;
@@ -63,3 +67,6 @@ X2 = stim.makeTrials(optsHighContrastFineGrid, outdir, 'hCont_fGrid_');
 X4 = stim.remakeTrialsNewContrast(X2, optsLowContrastFineGrid, ...
     outdir, 'lCont_fGrid_');
 rng('shuffle');
+
+X5 = stim.makeTrials(optsGaussCoarseGrid, outdir, 'gauss_cGrid_');
+
