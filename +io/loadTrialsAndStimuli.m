@@ -1,11 +1,10 @@
-function [Z, X, M] = loadTrialsAndStimuli(fnm)
+function [Z, X, M] = loadTrialsAndStimuli(fnm, stimdir)
 % fnm - trial info filename (relative to 'data' dir)
 
 keepTrialCode = 150;
-stimdir = 'stim_mats';
 nrmap = {'lCont_cGrid', 'hCont_cGrid', ...
     'lCont_fGrid', 'hCont_fGrid', 'gauss_cGrid'};
-nrval = [8 8 4 4 8];
+nrval = [8 8 4 4 4];
 
 %% load trial info
 
@@ -30,5 +29,28 @@ end
 X = io.loadStimuliPerTrial(Z, M);
 X = cat(3, X{:});
 X = permute(X, [2 3 1]); % nd x ntrials x npulses
+
+% remove trials where pixel values out-of-bounds
+X(X<0) = nan;
+X(X>255) = nan;
+if any(isnan(X(:)))
+    x = permute(X, [2 1 3]);
+    x = x(1:end,:);
+    ixBad = any(isnan(x),2);
+    X = X(:,~ixBad,:);
+    Z = Z(~ixBad);
+end
+
+X = X - 128; % center around mean-gray
+
+uns = unique(X(:));
+if numel(uns) == 3
+    disp('binary-izing');
+    nvals = sort(uns);
+    assert(nvals(2)==0);
+    X(X == nvals(1)) = -1;
+    X(X == nvals(2)) = 0;
+    X(X == nvals(3)) = 1;
+end
 
 end

@@ -1,7 +1,7 @@
 %% find cell with maximum spike count modulation from median
 
 prcs = [20 50 80];
-Yprc = prctile(Y0, prcs, 1);
+Yprc = prctile(Y, prcs, 1);
 
 Yprc = Yprc';
 % plot(Yprc);
@@ -13,14 +13,14 @@ Yprc = Yprc';
 scs1 = nan(size(Y0,2),2);
 scs2 = nan(size(Y0,2),2);
 
-nd1 = (ixxb-ixxa+1);
-nd2 = (ixyb-ixya+1);
+nd1 = 13;
+nd2 = nd1;
 
 % cellind = 29;
 % cellind = 60;
 for cellind = [18 45 49 55 78]%1:size(Y0,2)
     
-    obj = evaluateLinearModel(X02, Y0(:,cellind), D, 'ASD');
+    obj = evaluateLinearModel(X1, Y(:,cellind), D, 'ASD');
     objML = obj;
     objR = obj;
     scs1(cellind,1) = objML.score_dev;
@@ -28,14 +28,14 @@ for cellind = [18 45 49 55 78]%1:size(Y0,2)
     
     rs = Yprc(cellind,:);
     
-    ix0 = Y0(:,cellind) <= rs(1);
-    ix1 = Y0(:,cellind) >= rs(3);
+    ix0 = Y(:,cellind) <= rs(1);
+    ix1 = Y(:,cellind) >= rs(3);
 
-    st0 = X02(ix0,:) - 127.5;
-    st1 = X02(ix1,:) - 127.5;
+    st0 = X1(ix0,:) - 127.5;
+    st1 = X1(ix1,:) - 127.5;
     
     S = [st0; st1];
-    R = [Y0(ix0,cellind); Y0(ix1,cellind)];
+    R = [Y(ix0,cellind); Y(ix1,cellind)];
 %     obj = evaluateLinearModel(S, R, D, 'ASD');
 %     objML = evaluateLinearModel(S, R, D, 'ML');
 %     objR = evaluateLinearModel(S, R, D, 'ML');
