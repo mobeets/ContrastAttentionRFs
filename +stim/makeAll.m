@@ -14,10 +14,13 @@ trialLengthSec = 2.0;
 pulsesPerSec = 10;
 
 npulses = 50;
-nrows = [12 32];
-ncols = [12 32];
-pixelsPerElem = [16 6];
-stimContrast = [1.0 0.2];
+% nrows = [12 32];
+% ncols = [12 32];
+% pixelsPerElem = [16 6];
+nrows = [16 32];
+ncols = [16 32];
+pixelsPerElem = [8 4];
+stimContrast = [1.0 0.2 0.3];
 
 opts = struct(...
     'randSeed', nan, ...
@@ -42,31 +45,38 @@ optsLowContrastCoarseGrid.stimContrast = stimContrast(2);
 optsLowContrastFineGrid = optsHighContrastFineGrid;
 optsLowContrastFineGrid.stimContrast = stimContrast(2);
 
-optsGaussCoarseGrid = optsHighContrastCoarseGrid;
+optsGaussCoarseGrid = optsHighContrastFineGrid;
 optsGaussCoarseGrid.stimDist = 'gauss';
-optsGaussCoarseGrid.stimContrast = stimContrast(2);
+optsGaussCoarseGrid.stimContrast = stimContrast(3);
 
 %% save all
 
 outdir = 'stim_mats';
 
-seed = randi(1e5);
-optsHighContrastCoarseGrid.randSeed = seed;
-optsLowContrastCoarseGrid.randSeed = seed;
+% seed = randi(1e5);
+% optsHighContrastCoarseGrid.randSeed = seed;
+% optsLowContrastCoarseGrid.randSeed = seed;
+% 
+% X1 = stim.makeTrials(optsHighContrastCoarseGrid, outdir, 'hCont_cGrid_');
+% X3 = stim.remakeTrialsNewContrast(X1, optsLowContrastCoarseGrid, ...
+%     outdir, 'lCont_cGrid_');
+% 
+% rng('shuffle');
+% seed = randi(1e5);
+% optsHighContrastFineGrid.randSeed = seed;
+% optsLowContrastFineGrid.randSeed = seed;
+% 
+% X2 = stim.makeTrials(optsHighContrastFineGrid, outdir, 'hCont_fGrid_');
+% X4 = stim.remakeTrialsNewContrast(X2, optsLowContrastFineGrid, ...
+%     outdir, 'lCont_fGrid_');
+% rng('shuffle');
 
-X1 = stim.makeTrials(optsHighContrastCoarseGrid, outdir, 'hCont_cGrid_');
-X3 = stim.remakeTrialsNewContrast(X1, optsLowContrastCoarseGrid, ...
-    outdir, 'lCont_cGrid_');
+X5 = stim.makeTrials(optsGaussCoarseGrid, outdir, 'gauss_fGrid_');
 
-rng('shuffle');
-seed = randi(1e5);
-optsHighContrastFineGrid.randSeed = seed;
-optsLowContrastFineGrid.randSeed = seed;
+%% view examples
 
-X2 = stim.makeTrials(optsHighContrastFineGrid, outdir, 'hCont_fGrid_');
-X4 = stim.remakeTrialsNewContrast(X2, optsLowContrastFineGrid, ...
-    outdir, 'lCont_fGrid_');
-rng('shuffle');
-
-X5 = stim.makeTrials(optsGaussCoarseGrid, outdir, 'gauss_cGrid_');
-
+stim.showTrial(X1{1})
+stim.showTrial(X2{1})
+stim.showTrial(X3{1})
+stim.showTrial(X4{1})
+stim.showTrial(X5{1})
