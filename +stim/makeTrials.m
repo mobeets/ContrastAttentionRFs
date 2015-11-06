@@ -25,10 +25,14 @@ else
 end
 
 % create trials
-X = cell(opts.ntrials,1);
-for ii = 1:opts.ntrials    
-    opts.npulses = round(ts(ii)*opts.pulsesPerSec);
-    X{ii} = stim.makeTrial(opts);
+if isfield(opts, 'stimDist') && strcmpi(opts.stimDist, 'ica')
+    [X, S] = stim.makeTrial_ICA(opts);
+else
+    X = cell(opts.ntrials,1);
+    for ii = 1:opts.ntrials    
+        opts.npulses = round(ts(ii)*opts.pulsesPerSec);
+        X{ii} = stim.makeTrial(opts);
+    end
 end
 
 if isempty(outdir)
@@ -39,7 +43,12 @@ end
 for ii = 1:opts.ntrials
     outfile = fullfile(outdir, [prefix num2str(ii)]);
     mov = X{ii};
-    save(outfile, 'mov', 'opts');
+    if exist('S', 'var')
+        ica_mixers = S;
+        save(outfile, 'mov', 'opts', 'ica_mixers');
+    else
+        save(outfile, 'mov', 'opts');
+    end
 end
 
 end

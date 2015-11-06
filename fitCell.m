@@ -1,10 +1,12 @@
 %% load trial info
 
-% fnm = 'sy20151007mapJay0002_trialinfo.mat';
+fnm = 'sy20151007mapJay0002_trialinfo.mat';
+stimdir = 'stim_mats_20151007';
 % fnm = 'SY20151029JayMovie0001_trialinfo.mat';
-fnm = 'SY20151030JayMovie0001_trialinfo.mat';
+% stimdir = 'stim_mats_20151029';
+% fnm = 'SY20151030JayMovie0001_trialinfo.mat';
 % fnm = 'SY20151030JayMovie0002_trialinfo.mat'; % gauss
-stimdir = 'stim_mats_20151030';
+% stimdir = 'stim_mats_20151030';
 [Z, X0, M] = io.loadTrialsAndStimuli(fnm, stimdir);
 
 %% load spike counts per stimulus pulse
@@ -21,7 +23,7 @@ Y0 = Y0(:,:,pulses);
 
 keepRepeats = true;
 % curCond = 'gauss'; curGrid = 'cGrid';
-curCond = 'hCont'; curGrid = 'fGrid';
+curCond = 'hCont'; curGrid = 'cGrid';
 [Z2, X02, Y02, ix] = io.filterTrials(Z, X0, Y0, curCond, curGrid, ...
     keepRepeats);
 X = X02(1:end,:)'; % now: ntrials x nd

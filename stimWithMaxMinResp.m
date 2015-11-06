@@ -3,12 +3,16 @@
 prcs = [20 50 80];
 Yprc = prctile(Y, prcs, 1);
 
+
 Yprc = Yprc';
-% plot(Yprc);
+figure;
+plot(sortrows(Yprc, 2));
 % tmp = diff(Yprc')';
 % modl = tmp(:,2)./Yprc(:,2);
 % [~,ix] = max(modl(~isinf(modl)))
 % cellind = ix;
+
+%%
 
 scs1 = nan(size(Y0,2),2);
 scs2 = nan(size(Y0,2),2);
@@ -18,7 +22,7 @@ nd2 = nd1;
 
 % cellind = 29;
 % cellind = 60;
-for cellind = [18 45 49 55 78]%1:size(Y0,2)
+for cellind = [6]%1:size(Y0,2)
     
     obj = evaluateLinearModel(X1, Y(:,cellind), D, 'ASD');
     objML = obj;

@@ -24,6 +24,10 @@ if isfield(opts, 'stimOffset') % mean gray = 128
 end
 X = round(X);
 
+if min(round(X(:))) < -128 || max(round(X(:))) > 128
+    error('X out of bounds');
+end
+
 % X{i} should be stimulus on ith frame
 X = reshape(X, [npulses ncols nrows]);
 X = num2cell(X, [2 3]);
@@ -35,3 +39,4 @@ if isfield(opts, 'pixelsPerElem') && opts.pixelsPerElem > 1
 end
 
 end
+
