@@ -44,7 +44,7 @@ for ii = 1:opts.ntrials
     outfile = fullfile(outdir, [prefix num2str(ii)]);
     mov = X{ii};
     if exist('S', 'var')
-        ica_mixers = S;
+        ica_mixers = S{ii};
         save(outfile, 'mov', 'opts', 'ica_mixers');
     else
         save(outfile, 'mov', 'opts');

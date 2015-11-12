@@ -13,7 +13,7 @@ ntrials = 100;
 trialLengthSec = 2.0;
 pulsesPerSec = 10;
 
-npulses = 50;
+npulses = trialLengthSec*pulsesPerSec;
 % nrows = [12 32];
 % ncols = [12 32];
 % pixelsPerElem = [16 6];
@@ -52,36 +52,40 @@ optsGaussFineGrid.stimContrast = stimContrast(3);
 A = load('data/ICA.mat'); A = A.G;
 optsIcaFineGrid = optsHighContrastFineGrid;
 optsIcaFineGrid.stimDist = 'ica';
+optsIcaFineGrid.shape = [nrows(1) ncols(1)];
 optsIcaFineGrid.A = A;
 
 %% save all
 
-outdir = 'stim_mats';
+outdir = 'stim_mats_20151111';
 
-seed = randi(1e5);
-optsHighContrastCoarseGrid.randSeed = seed;
-optsLowContrastCoarseGrid.randSeed = seed;
+% seed = randi(1e5);
+% optsHighContrastCoarseGrid.randSeed = seed;
+% optsLowContrastCoarseGrid.randSeed = seed;
+% 
+% X1 = stim.makeTrials(optsHighContrastCoarseGrid, outdir, 'hCont_cGrid_');
+% X3 = stim.remakeTrialsNewContrast(X1, optsLowContrastCoarseGrid, ...
+%     outdir, 'lCont_cGrid_');
+% 
+% rng('shuffle');
+% seed = randi(1e5);
+% optsHighContrastFineGrid.randSeed = seed;
+% optsLowContrastFineGrid.randSeed = seed;
+% 
+% X2 = stim.makeTrials(optsHighContrastFineGrid, outdir, 'hCont_fGrid_');
+% X4 = stim.remakeTrialsNewContrast(X2, optsLowContrastFineGrid, ...
+%     outdir, 'lCont_fGrid_');
+% rng('shuffle');
 
-X1 = stim.makeTrials(optsHighContrastCoarseGrid, outdir, 'hCont_cGrid_');
-X3 = stim.remakeTrialsNewContrast(X1, optsLowContrastCoarseGrid, ...
-    outdir, 'lCont_cGrid_');
+% X5 = stim.makeTrials(optsGaussFineGrid, outdir, 'gauss_fGrid_');
 
-rng('shuffle');
-seed = randi(1e5);
-optsHighContrastFineGrid.randSeed = seed;
-optsLowContrastFineGrid.randSeed = seed;
-
-X2 = stim.makeTrials(optsHighContrastFineGrid, outdir, 'hCont_fGrid_');
-X4 = stim.remakeTrialsNewContrast(X2, optsLowContrastFineGrid, ...
-    outdir, 'lCont_fGrid_');
-rng('shuffle');
-
-X5 = stim.makeTrials(optsGaussFineGrid, outdir, 'gauss_fGrid_');
+X6 = stim.makeTrials(optsIcaFineGrid, outdir, 'ica_fGrid1_');
 
 %% view examples
 
-stim.showTrial(X1{1})
-stim.showTrial(X2{1})
-stim.showTrial(X3{1})
-stim.showTrial(X4{1})
-stim.showTrial(X5{1})
+% stim.showTrial(X1{1})
+% stim.showTrial(X2{1})
+% stim.showTrial(X3{1})
+% stim.showTrial(X4{1})
+% stim.showTrial(X5{1})
+stim.showTrial(X6{1})

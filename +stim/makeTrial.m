@@ -24,7 +24,7 @@ if isfield(opts, 'stimOffset') % mean gray = 128
 end
 X = round(X);
 
-if min(round(X(:))) < -128 || max(round(X(:))) > 128
+if min(round(X(:))) < 0 || max(round(X(:))) > 255
     error('X out of bounds');
 end
 

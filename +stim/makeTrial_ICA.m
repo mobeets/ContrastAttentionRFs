@@ -21,8 +21,11 @@ S = normrnd(0, 1, ntrials*npulses, nc);
 X = S*A';
 
 X = X*(127/max(abs(X(:))));
-X = round(X);
-if min(round(X(:))) < -128 || max(round(X(:))) > 128
+if isfield(opts, 'stimOffset') % mean gray = 128
+    X = X + opts.stimOffset;
+end
+X = double(round(X));
+if min(round(X(:))) < 0 || max(round(X(:))) > 255
     error('X out of bounds');
 end
 
