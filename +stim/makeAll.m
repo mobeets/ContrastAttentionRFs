@@ -55,9 +55,13 @@ optsIcaFineGrid.stimDist = 'ica';
 optsIcaFineGrid.shape = [nrows(1) ncols(1)];
 optsIcaFineGrid.A = A;
 
+optsSparseFineGrid = optsHighContrastFineGrid;
+optsSparseFineGrid.stimDist = 'sparse';
+optsSparseFineGrid.stimContrast = stimContrast(1);
+
 %% save all
 
-outdir = 'stim_mats_20151111';
+outdir = 'data/stim_mats_20151117';
 
 % seed = randi(1e5);
 % optsHighContrastCoarseGrid.randSeed = seed;
@@ -79,7 +83,9 @@ outdir = 'stim_mats_20151111';
 
 % X5 = stim.makeTrials(optsGaussFineGrid, outdir, 'gauss_fGrid_');
 
-X6 = stim.makeTrials(optsIcaFineGrid, outdir, 'ica_fGrid1_');
+% X6 = stim.makeTrials(optsIcaFineGrid, outdir, 'ica_fGrid1_');
+
+X7 = stim.makeTrials(optsSparseFineGrid, outdir, 'sps_fGrid_');
 
 %% view examples
 
@@ -88,4 +94,6 @@ X6 = stim.makeTrials(optsIcaFineGrid, outdir, 'ica_fGrid1_');
 % stim.showTrial(X3{1})
 % stim.showTrial(X4{1})
 % stim.showTrial(X5{1})
-stim.showTrial(X6{1})
+% stim.showTrial(X6{1})
+close all;
+stim.showTrial(X7{2}, 0.2)

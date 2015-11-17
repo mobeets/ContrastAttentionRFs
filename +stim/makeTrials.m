@@ -27,6 +27,8 @@ end
 % create trials
 if isfield(opts, 'stimDist') && strcmpi(opts.stimDist, 'ica')
     [X, S] = stim.makeTrial_ICA(opts);
+elseif isfield(opts, 'stimDist') && strcmpi(opts.stimDist, 'sparse')
+    X = stim.makeTrial_sparse(opts);
 else
     X = cell(opts.ntrials,1);
     for ii = 1:opts.ntrials    
@@ -36,6 +38,10 @@ else
 end
 
 if isempty(outdir)
+    return;
+end
+if ~exist(outdir, 'dir')
+    warning(['outdir "' outdir '" does not exist']);
     return;
 end
 
