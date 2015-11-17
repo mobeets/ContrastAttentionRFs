@@ -4,9 +4,12 @@
 % stimdir = 'stim_mats_20151007';
 % fnm = 'SY20151029JayMovie0001_trialinfo.mat';
 % stimdir = 'stim_mats_20151029';
-fnm = 'SY20151030JayMovie0001_trialinfo.mat';
-% fnm = 'SY20151030JayMovie0002_trialinfo.mat'; % gauss
+% fnm = 'SY20151030JayMovie0001_trialinfo.mat';
+fnm = 'SY20151030JayMovie0002_trialinfo.mat'; % gauss
 stimdir = 'stim_mats_20151030';
+
+% fnm = 'SY20151112JayMovie0001_trialinfo.mat';
+% stimdir = 'stim_mats_20151111';
 [Z, X0, M] = io.loadTrialsAndStimuli(fnm, stimdir);
 
 %% load spike counts per stimulus pulse
@@ -23,7 +26,8 @@ Y0 = Y0(:,:,pulses);
 
 keepRepeats = true;
 % curCond = 'gauss'; curGrid = 'cGrid';
-curCond = 'hCont'; curGrid = 'fGrid';
+% curCond = 'hCont'; curGrid = 'fGrid';
+curCond = 'ica'; curGrid = 'fGrid1';
 [Z2, X02, Y02, ix] = io.filterTrials(Z, X0, Y0, curCond, curGrid, ...
     keepRepeats);
 X = X02(1:end,:)'; % now: ntrials x nd
@@ -38,7 +42,8 @@ Y = [Y; Y2];
 
 %% truncate stim around putative rf
 
-rfBounds = [20 70; -5 -45];
+rfBounds = [-100 300; 100 -300];
+% rfBounds = [20 70; -5 -45];
 % rfBounds = [20 40; 10 -20];
 % rfBounds = [10 30; -5 -20];
 % rfBounds = [-5 30; 5 -30];
@@ -54,7 +59,7 @@ X1 = Xc;
 STA = X1'*Y;
 nd = sqrt(size(STA,1));
 
-cellind = 49;
+cellind = 49; % 49 22 6
 Xcov = X1'*X1;
 WSTA = Xcov \ STA(:,cellind);
 obj = evaluateLinearModel(X1, Y(:,cellind), nan, 'ML');
@@ -62,6 +67,8 @@ obj = evaluateLinearModel(X1, Y(:,cellind), nan, 'ML');
 Xxy = tools.cartesianProductSquare([1:nd; 1:nd]);
 D = asd.sqdist.space(Xxy);
 objASD = evaluateLinearModel(X1, Y(:,cellind), D, 'ASD');
+
+[objLasso, objLassoStats] = lasso(X1, Y(:,cellind));
 
 %% view STAs - all
 
@@ -86,6 +93,9 @@ end
 
 [RFX,RFY] = meshgrid(stimLoc(1,:), stimLoc(2,:));
 
+A = load('data/ICA.mat'); A = A.G;
+rfmap = A;
+
 figure; colormap gray;
 
 subplot(2,2,1);
@@ -103,15 +113,22 @@ axis square;
 xlabel('whitened STA');
 
 subplot(2,2,3);
-w = obj.w;
+w = rfmap*obj.w;
 imagesc(RFX(:), RFY(:), reshape(w,nd,nd));
 set(gca, 'ydir', 'normal');
 axis square;
 xlabel('ML');
 
+% subplot(2,2,4);
+% w = rfmap*objASD.w;
+% imagesc(RFX(:), RFY(:), reshape(w,nd,nd));
+% set(gca, 'ydir', 'normal');
+% axis square;
+% xlabel('ASD');
+
 subplot(2,2,4);
-w = objASD.w;
+w = rfmap*objLasso(:,95);
 imagesc(RFX(:), RFY(:), reshape(w,nd,nd));
 set(gca, 'ydir', 'normal');
 axis square;
-xlabel('ASD');
+xlabel('Lasso');

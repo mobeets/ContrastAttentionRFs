@@ -3,8 +3,8 @@ function [Z, X, M] = loadTrialsAndStimuli(fnm, stimdir)
 
 keepTrialCode = 150;
 nrmap = {'lCont_cGrid', 'hCont_cGrid', ...
-    'lCont_fGrid', 'hCont_fGrid', 'gauss_cGrid'};
-nrval = [8 8 4 4 4];
+    'lCont_fGrid', 'hCont_fGrid', 'gauss_cGrid', 'ica_fGrid1'};
+nrval = [8 8 4 4 4 4];
 
 %% load trial info
 
@@ -21,7 +21,12 @@ suffixes = unique(cellfun(@(z) z.movieprefix(9:end-1), Z, 'uni', 0));
 for ii = 1:numel(suffixes)
     suff = suffixes{ii};
     nr = nrval(strcmp(suff, nrmap));
-    M.(suff) = io.loadStimulusMovies(stimdir, suff, nan, nr);
+    if false %strcmpi(suff(1:3), 'ica')
+        fieldnm = 'ica_mixers';
+    else
+        fieldnm = 'mov';
+    end
+    M.(suff) = io.loadStimulusMovies(stimdir, suff, nan, nr, fieldnm);
 end
 
 %% match movie frames with trials
@@ -29,6 +34,14 @@ end
 X = io.loadStimuliPerTrial(Z, M);
 X = cat(3, X{:});
 X = permute(X, [2 3 1]); % nd x ntrials x npulses
+
+if strcmp(fieldnm, 'ica_mixers')
+    if numel(suffixes) > 1
+        % if other suffixes exist, we won't go below
+        warning('Sorry, not checking for out of bounds pixels.');
+    end
+    return;
+end
 
 % remove trials where pixel values out-of-bounds
 X(X<0) = nan;
