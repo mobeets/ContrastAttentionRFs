@@ -12,6 +12,6 @@ stimRect = [centerx-npixels/2 centerx+npixels/2; ...
 % location of each stimulus patch
 stimX = linspace(stimRect(1,1), stimRect(1,2), nd);
 stimY = linspace(stimRect(2,1), stimRect(2,2), nd);
-stimLoc = [stimX; stimY];
+stimLoc = [stimX; stimY(end:-1:1)];
 
 end

@@ -5,18 +5,18 @@
 % fnm = 'SY20151029JayMovie0001_trialinfo.mat';
 % stimdir = 'stim_mats_20151029';
 % fnm = 'SY20151030JayMovie0001_trialinfo.mat';
-% fnm = 'SY20151030JayMovie0002_trialinfo.mat'; % gauss
-% stimdir = 'stim_mats_20151030';
+fnm = 'SY20151030JayMovie0002_trialinfo.mat'; % gauss
+stimdir = 'stim_mats_20151030';
 % fnm = 'SY20151112JayMovie0001_trialinfo.mat'; % ica
 % stimdir = 'stim_mats_20151111';
 % fnm = 'SY20151118JayMovie0002_trialinfo.mat'; % sparse, fine
 % stimdir = 'stim_mats_20151118';
 
-fnm = 'SY20151119JayMovie0001_trialinfo.mat'; % sparse, coarse
-stimdir = 'stim_mats_20151119';
+% fnm = 'SY20151119JayMovie0001_trialinfo.mat'; % sparse, coarse
+% stimdir = 'stim_mats_20151119';
 
 [Z, XA, M] = io.loadTrialsAndStimuli(['exps/' fnm], ...
-    ['data/' stimdir], Z);
+    ['data/' stimdir]);
 
 %% load spike counts per stimulus pulse
 
@@ -31,10 +31,10 @@ Y0 = YA(:,:,pulses);
 %% filter trials and prepare to fit
 
 keepRepeats = true;
-% curCond = 'gauss'; curGrid = 'cGrid';
+curCond = 'gauss'; curGrid = 'cGrid';
 % curCond = 'hCont'; curGrid = 'fGrid';
 % curCond = 'ica'; curGrid = 'fGrid1';
-curCond = 'sps'; curGrid = 'cGrid';
+% curCond = 'sps'; curGrid = 'cGrid';
 [Z2, X02, Y02, ix] = io.filterTrials(Z, X0, Y0, curCond, curGrid, ...
     keepRepeats);
 X = X02(1:end,:)'; % now: ntrials x nd
@@ -77,6 +77,47 @@ D = asd.sqdist.space(Xxy);
 % objASD = evaluateLinearModel(X1, Y(:,cellind), D, 'ASD');
 
 % [objLasso, objLassoStats] = lasso(X1, Y(:,cellind));
+
+%%
+
+cellind = 21;
+Xxy = tools.cartesianProductSquare([1:nd; 1:nd]);
+D = asd.sqdist.space(Xxy);
+% Xa = X; Xa(Xa<0) = 0;
+Xa = X;
+% objASD = evaluateLinearModel(Xa, Y(:,cellind), D, 'ASD');
+% objR = evaluateLinearModel(Xa, Y(:,cellind), D, 'ridge');
+objML = evaluateLinearModel(Xa, Y(:,cellind), D, 'ridge');
+objML = (Xa'*Xa + 1e-3*eye(size(Xa,2)))\(Xa'*Y(:,cellind));
+% RFC = plotRF_meanCounts(X,Y(:,cellind),stimLoc);
+
+%%
+
+figure; colormap gray;
+subplot(2,2,1);
+imagesc(stimLoc(1,:), stimLoc(2,:), reshape(objASD.w, nd, nd));
+hold on; plot(0,0,'rs');
+set(gca, 'YDir', 'normal');
+title(['ASD, rsq=' num2str(objASD.score)]);
+axis square;
+subplot(2,2,2);
+imagesc(stimLoc(1,:), stimLoc(2,:), reshape(objR.w, nd, nd));
+hold on; plot(0,0,'rs');
+set(gca, 'YDir', 'normal');
+title(['ASD, rsq=' num2str(objR.score)]);
+axis square;
+subplot(2,2,3);
+imagesc(stimLoc(1,:), stimLoc(2,:), reshape(objML.w, nd, nd));
+hold on; plot(0,0,'rs');
+set(gca, 'YDir', 'normal');
+axis square;
+title(['ASD, rsq=' num2str(objML.score)]);
+subplot(2,2,4);
+imagesc(stimLoc(1,:), stimLoc(2,:), reshape(RFC, nd, nd));
+hold on; plot(0,0,'rs');
+set(gca, 'YDir', 'normal');
+axis square;
+title('avg spike count');
 
 %% view STAs - all
 
