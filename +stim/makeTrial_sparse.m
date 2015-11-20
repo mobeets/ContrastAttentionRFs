@@ -21,10 +21,17 @@ else
     stimContrast = 1;
 end
 
+% show random permutations of all available locations
 % subtract one to keep indices off edges
-S0 = randi((ncols-1)*(nrows-1), [ntrials npulses]);
+% S0 = randi((ncols-1)*(nrows-1), [ntrials npulses]);
+np = (ncols-1)*(nrows-1);
+ndraws = ceil(ntrials*npulses/np);
+[~, S0] = sort(rand(ndraws, np),2);
+S0 = S0'; % need transpose so that first np trials include all locs
+S0 = reshape(S0(1:ntrials*npulses), [ntrials npulses]);
+
 % S = randi(ncols*nrows, [ntrials npulses]);
-T = randi(2, [ntrials npulses]);
+T = randi(1, [ntrials npulses]);
 
 % [ixx, ixy] = ind2sub([ncols nrows], S);
 [ixx, ixy] = ind2sub([ncols-1 nrows-1], S0);
@@ -60,16 +67,16 @@ for ii = 1:ntrials
         
         x = zeros(ncols, nrows);
         switch T(ii,jj)
-            case 4
+            case 1
                 x(ix0,iy0) = 1;
                 x(ix0+1,iy0) = -1;
-            case 3
-                x(ix0,iy0) = 1;
-                x(ix0,iy0+1) = -1;
             case 2
                 x(ix0,iy0) = -1;
                 x(ix0+1,iy0) = 1;
-            case 1
+            case 3
+                x(ix0,iy0) = 1;
+                x(ix0,iy0+1) = -1;            
+            case 4
                 x(ix0,iy0) = -1;
                 x(ix0,iy0+1) = 1;
         end

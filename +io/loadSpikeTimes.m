@@ -26,7 +26,8 @@ end
 
 keepTrialCode = 150;
 trialLengthSec = 2;
-latencySec = 0.038;
+latencySec = 0.03;
+% latencySec = 0.038;
 
 ntrials = numel(Z);
 nchannels = size(Z{1}.channels, 1);
@@ -45,16 +46,16 @@ Y = cell(ntrials,1);
 tix = true(ntrials,1);
 % Y = nan(ntrials, nchannels, nbins);
 for ii = 1:ntrials
-    x = Z{ii};
+    z = Z{ii};
     
     % if trial is not aborted
-    if ~any(x.codes(:,1) == keepTrialCode) % reward received
+    if ~any(z.codes(:,1) == keepTrialCode) % reward not received
         tix(ii) = false;
         continue;
     end
     ycs = nan(nchannels, nbins);
     for jj = 1:nchannels
-        y = x.spikes(x.spikes(:,1) == jj,3) - latencySec - startTimes{ii};
+        y = z.spikes(z.spikes(:,1) == jj,3) - latencySec - startTimes{ii};
         ix = y >= minTime & y <= maxTime;
         y = y(ix);
         yc = histc(y, bins)';

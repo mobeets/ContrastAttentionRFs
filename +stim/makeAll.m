@@ -56,12 +56,28 @@ optsIcaFineGrid.shape = [nrows(1) ncols(1)];
 optsIcaFineGrid.A = A;
 
 optsSparseFineGrid = optsHighContrastFineGrid;
+optsSparseFineGrid.ntrials = 100;
 optsSparseFineGrid.stimDist = 'sparse';
 optsSparseFineGrid.stimContrast = stimContrast(1);
 
+optsSparseCoarseGrid = optsHighContrastCoarseGrid;
+optsSparseCoarseGrid.ntrials = 400;
+optsSparseCoarseGrid.stimDist = 'sparse';
+optsSparseCoarseGrid.stimContrast = stimContrast(1);
+
+optsNaturalScenes = optsHighContrastFineGrid;
+optsNaturalScenes.ntrials = 500;
+optsNaturalScenes.stimDist = 'natural';
+optsNaturalScenes.shape = [200 200];
+optsNaturalScenes.npulses = 8;
+optsNaturalScenes.window = 'hann';
+optsNaturalScenes.datadir = 'data/scenes';
+optsNaturalScenes.minContrast = 0.25; % RMS
+optsNaturalScenes.maxNPerImage = 10; % max patches per image
+
 %% save all
 
-outdir = 'data/stim_mats_20151117';
+outdir = 'data/stim_mats_20151119';
 
 % seed = randi(1e5);
 % optsHighContrastCoarseGrid.randSeed = seed;
@@ -85,7 +101,10 @@ outdir = 'data/stim_mats_20151117';
 
 % X6 = stim.makeTrials(optsIcaFineGrid, outdir, 'ica_fGrid1_');
 
-X7 = stim.makeTrials(optsSparseFineGrid, outdir, 'sps_fGrid_');
+% X7 = stim.makeTrials(optsSparseFineGrid, outdir, 'sps_fGrid_');
+X9 = stim.makeTrials(optsSparseCoarseGrid, outdir, 'sps_cGrid_');
+
+% X8 = stim.makeTrials(optsNaturalScenes, outdir, 'natScenes_');
 
 %% view examples
 
@@ -96,4 +115,7 @@ X7 = stim.makeTrials(optsSparseFineGrid, outdir, 'sps_fGrid_');
 % stim.showTrial(X5{1})
 % stim.showTrial(X6{1})
 close all;
-stim.showTrial(X7{2}, 0.2)
+% stim.showTrial(X7{2}, 0.2)
+for ii = 21:50%numel(X8)
+    stim.showTrial(X9{ii}, 0.3)
+end

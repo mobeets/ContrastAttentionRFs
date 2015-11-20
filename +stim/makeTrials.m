@@ -29,6 +29,8 @@ if isfield(opts, 'stimDist') && strcmpi(opts.stimDist, 'ica')
     [X, S] = stim.makeTrial_ICA(opts);
 elseif isfield(opts, 'stimDist') && strcmpi(opts.stimDist, 'sparse')
     X = stim.makeTrial_sparse(opts);
+elseif isfield(opts, 'stimDist') && strcmpi(opts.stimDist, 'natural')
+    X = stim.makeTrial_natural(opts);
 else
     X = cell(opts.ntrials,1);
     for ii = 1:opts.ntrials    

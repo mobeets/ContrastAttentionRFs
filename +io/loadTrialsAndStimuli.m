@@ -1,32 +1,40 @@
-function [Z, X, M] = loadTrialsAndStimuli(fnm, stimdir)
+function [Z, X, M] = loadTrialsAndStimuli(fnm, stimdir, Z, M, fieldnm)
 % fnm - trial info filename (relative to 'data' dir)
 
+if nargin < 5
+    fieldnm = 'mov';
+end
 keepTrialCode = 150;
 nrmap = {'lCont_cGrid', 'hCont_cGrid', ...
-    'lCont_fGrid', 'hCont_fGrid', 'gauss_cGrid', 'ica_fGrid1'};
-nrval = [8 8 4 4 4 4];
+    'lCont_fGrid', 'hCont_fGrid', 'gauss_cGrid', 'ica_fGrid1', ...
+    'sps_fGrid', 'sps_cGrid'};
+nrval = [8 8 4 4 4 4 4 8];
 
 %% load trial info
 
-fn = fullfile('data', fnm);
-Z = load(fn);
-Z = Z.TrialInfo;
+if nargin < 3
+    fn = fullfile('data', fnm);
+    Z = load(fn);
+    Z = Z.TrialInfo;
 
-ixGood = cellfun(@(z) any(z.codes(:,1) == keepTrialCode), Z);
-Z = Z(ixGood);
+    ixGood = cellfun(@(z) any(z.codes(:,1) == keepTrialCode), Z);
+    Z = Z(ixGood);
+end
 
 %% load movies
 
-suffixes = unique(cellfun(@(z) z.movieprefix(9:end-1), Z, 'uni', 0));
-for ii = 1:numel(suffixes)
-    suff = suffixes{ii};
-    nr = nrval(strcmp(suff, nrmap));
-    if false %strcmpi(suff(1:3), 'ica')
-        fieldnm = 'ica_mixers';
-    else
-        fieldnm = 'mov';
+if nargin < 4
+    suffixes = unique(cellfun(@(z) z.movieprefix(9:end-1), Z, 'uni', 0));
+    for ii = 1:numel(suffixes)
+        suff = suffixes{ii};
+        nr = nrval(strcmp(suff, nrmap));
+        if false %strcmpi(suff(1:3), 'ica')
+            fieldnm = 'ica_mixers';
+        else
+            fieldnm = 'mov';
+        end
+        M.(suff) = io.loadStimulusMovies(stimdir, suff, nan, nr, fieldnm);
     end
-    M.(suff) = io.loadStimulusMovies(stimdir, suff, nan, nr, fieldnm);
 end
 
 %% match movie frames with trials

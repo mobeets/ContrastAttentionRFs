@@ -4,12 +4,11 @@ function plotFFT2(img,x,y,k,sfRange)
 
 if ~exist('x','var') || ~exist('y','var')
     x = [];
- y = [];
-
+    y = [];
 end
 
 if isempty(x) || isempty(y)
-        [x,y] = meshgrid(1:size(img,1));
+    [x,y] = meshgrid(1:size(img,1));
 end
 
 nPix = size(x,1);

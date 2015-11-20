@@ -2,12 +2,19 @@
 
 [Yr, xs0] = io.loadSpikeTimes(Z, 200, -1, 1);
 Ymean = squeeze(mean(Yr,2));
+
 %%
 figure; hold on;
-for ii = 1%size(Yall,1)
+for ii = 49%size(Ymean,1)
     ym = Ymean(ii,:);
 %     plot(xs, ym./sum(ym));
     plot(xs0, ym);
+    
+    hold on;
+    for jj = 0:0.1:2
+        plot([jj jj], [0 5], 'k');
+    end
+    ylim([0 3]);
 end
 
 %% response per stimulus

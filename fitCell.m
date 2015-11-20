@@ -5,29 +5,36 @@
 % fnm = 'SY20151029JayMovie0001_trialinfo.mat';
 % stimdir = 'stim_mats_20151029';
 % fnm = 'SY20151030JayMovie0001_trialinfo.mat';
-fnm = 'SY20151030JayMovie0002_trialinfo.mat'; % gauss
-stimdir = 'stim_mats_20151030';
-
-% fnm = 'SY20151112JayMovie0001_trialinfo.mat';
+% fnm = 'SY20151030JayMovie0002_trialinfo.mat'; % gauss
+% stimdir = 'stim_mats_20151030';
+% fnm = 'SY20151112JayMovie0001_trialinfo.mat'; % ica
 % stimdir = 'stim_mats_20151111';
-[Z, X0, M] = io.loadTrialsAndStimuli(fnm, stimdir);
+% fnm = 'SY20151118JayMovie0002_trialinfo.mat'; % sparse, fine
+% stimdir = 'stim_mats_20151118';
+
+fnm = 'SY20151119JayMovie0001_trialinfo.mat'; % sparse, coarse
+stimdir = 'stim_mats_20151119';
+
+[Z, XA, M] = io.loadTrialsAndStimuli(['exps/' fnm], ...
+    ['data/' stimdir], Z);
 
 %% load spike counts per stimulus pulse
 
-Y0 = io.loadSpikeTimes(Z);
+YA = io.loadSpikeTimes(Z);
 
 %% ignore first few pulses (stimulus onset)
 
 pulses = 3:20;
-X0 = X0(:,:,pulses);
-Y0 = Y0(:,:,pulses);
+X0 = XA(:,:,pulses);
+Y0 = YA(:,:,pulses);
 
 %% filter trials and prepare to fit
 
 keepRepeats = true;
 % curCond = 'gauss'; curGrid = 'cGrid';
 % curCond = 'hCont'; curGrid = 'fGrid';
-curCond = 'ica'; curGrid = 'fGrid1';
+% curCond = 'ica'; curGrid = 'fGrid1';
+curCond = 'sps'; curGrid = 'cGrid';
 [Z2, X02, Y02, ix] = io.filterTrials(Z, X0, Y0, curCond, curGrid, ...
     keepRepeats);
 X = X02(1:end,:)'; % now: ntrials x nd
@@ -63,12 +70,13 @@ cellind = 49; % 49 22 6
 Xcov = X1'*X1;
 WSTA = Xcov \ STA(:,cellind);
 obj = evaluateLinearModel(X1, Y(:,cellind), nan, 'ML');
+obj = evaluateLinearModel(X1, Y(:,cellind), nan, 'ridge');
  
 Xxy = tools.cartesianProductSquare([1:nd; 1:nd]);
 D = asd.sqdist.space(Xxy);
-objASD = evaluateLinearModel(X1, Y(:,cellind), D, 'ASD');
+% objASD = evaluateLinearModel(X1, Y(:,cellind), D, 'ASD');
 
-[objLasso, objLassoStats] = lasso(X1, Y(:,cellind));
+% [objLasso, objLassoStats] = lasso(X1, Y(:,cellind));
 
 %% view STAs - all
 
@@ -80,12 +88,12 @@ figure; colormap gray;
 for ii = 1:ncells
 %     subplot(ncols, nrows, ii);
     w = STA(:,ii);
-    w = Xcov \ w;
+%     w = Xcov \ w;
     imagesc(RFX(:), RFY(:), reshape(w,nd,nd));
     set(gca, 'ydir', 'normal');
     axis square;
     xlabel(ii);
-    pause(0.1);
+    pause(0.2);
     hold on;
 end
 

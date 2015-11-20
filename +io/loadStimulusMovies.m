@@ -22,6 +22,9 @@ end
 M = cell(numel(ws),1);
 for ii = 1:numel(ws)
     m = load(fullfile(indir, ws(ii).name));
+    vs = strsplit(ws(ii).name, '.');
+    vs = strsplit(vs{1}, '_');
+    ind = str2num(vs{end});
     p = m;
     if skipPixels > 1
         mm = m.(fieldNm);
@@ -29,7 +32,8 @@ for ii = 1:numel(ws)
             m.(fieldNm){jj} = mm{jj}(1:skipPixels:end, 1:skipPixels:end);
         end
     end
-    M{ii} = m.(fieldNm);
+    assert(isempty(M{ind}));
+    M{ind} = m.(fieldNm);
 end
 
 end
