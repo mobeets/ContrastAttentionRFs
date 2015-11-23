@@ -77,7 +77,7 @@ optsNaturalScenes.maxNPerImage = 10; % max patches per image
 
 %% save all
 
-outdir = 'data/stim_mats_20151119';
+outdir = 'data/stim_mats_20151120';
 
 % seed = randi(1e5);
 % optsHighContrastCoarseGrid.randSeed = seed;

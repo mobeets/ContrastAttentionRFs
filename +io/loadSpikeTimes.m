@@ -26,8 +26,8 @@ end
 
 keepTrialCode = 150;
 trialLengthSec = 2;
-latencySec = 0.03;
-% latencySec = 0.038;
+% latencySec = 0.08;
+latencySec = 0.038;
 
 ntrials = numel(Z);
 nchannels = size(Z{1}.channels, 1);

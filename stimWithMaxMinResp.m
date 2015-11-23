@@ -20,7 +20,7 @@ figure; hist(Yprc(:,3)-Yprc(:,1));
 scs1 = nan(size(Y0,2),2);
 scs2 = nan(size(Y0,2),2);
 
-nd1 = 16;
+nd1 = 32;
 nd2 = nd1;
 X1 = X;
 X1(X1 < 0) = 0;

@@ -37,6 +37,16 @@ hist(Y2a,20);
 
 %%
 
+figure; colormap gray;
+for ii = 1:size(X,1)
+    imagesc(reshape(X(ii,:),16,16));
+    pause(0.1);
+end
+
+%%
+
+%%
+
 for ii = 1:10%size(Y,2)
     plotRF_meanCounts(X,Y(:,ii), stimLoc);
     pause(0.5);

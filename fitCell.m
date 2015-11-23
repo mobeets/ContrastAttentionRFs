@@ -5,15 +5,15 @@
 % fnm = 'SY20151029JayMovie0001_trialinfo.mat';
 % stimdir = 'stim_mats_20151029';
 % fnm = 'SY20151030JayMovie0001_trialinfo.mat';
-fnm = 'SY20151030JayMovie0002_trialinfo.mat'; % gauss
-stimdir = 'stim_mats_20151030';
+% fnm = 'SY20151030JayMovie0002_trialinfo.mat'; % gauss
+% stimdir = 'stim_mats_20151030';
 % fnm = 'SY20151112JayMovie0001_trialinfo.mat'; % ica
 % stimdir = 'stim_mats_20151111';
 % fnm = 'SY20151118JayMovie0002_trialinfo.mat'; % sparse, fine
 % stimdir = 'stim_mats_20151118';
 
-% fnm = 'SY20151119JayMovie0001_trialinfo.mat'; % sparse, coarse
-% stimdir = 'stim_mats_20151119';
+fnm = 'SY20151119JayMovie0001_trialinfo.mat'; % sparse, coarse
+stimdir = 'stim_mats_20151119';
 
 [Z, XA, M] = io.loadTrialsAndStimuli(['exps/' fnm], ...
     ['data/' stimdir]);
@@ -31,10 +31,10 @@ Y0 = YA(:,:,pulses);
 %% filter trials and prepare to fit
 
 keepRepeats = true;
-curCond = 'gauss'; curGrid = 'cGrid';
-% curCond = 'hCont'; curGrid = 'fGrid';
+% curCond = 'gauss'; curGrid = 'cGrid';
+% curCond = 'hCont'; curGrid = 'cGrid';
 % curCond = 'ica'; curGrid = 'fGrid1';
-% curCond = 'sps'; curGrid = 'cGrid';
+curCond = 'sps'; curGrid = 'cGrid';
 [Z2, X02, Y02, ix] = io.filterTrials(Z, X0, Y0, curCond, curGrid, ...
     keepRepeats);
 X = X02(1:end,:)'; % now: ntrials x nd
