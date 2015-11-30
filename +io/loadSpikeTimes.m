@@ -1,20 +1,24 @@
 function [Y, bins, tix] = loadSpikeTimes(Z, nbinsStim, ...
-    preStimSecs, postStimSecs)
+    preStimSecs, postStimSecs, latencySec)
 % Y{ii} is an [nbins x nchannels] matrix of spike counts
 %    on the (ii)th trial
 % 
 % nbins0 - number of bins during stimulus presentation
 % 
 
-if nargin < 2
+if nargin < 2 || isnan(nbinsStim)
     nbinsStim = Z{1}.numframes/Z{1}.dwell; % number of distinct stimuli
     % nbinsStim = trialLengthSec/0.01;
 end
-if nargin < 3
+if nargin < 3 || isnan(preStimSecs)
     preStimSecs = 0;
 end
-if nargin < 4
+if nargin < 4 || isnan(postStimSecs)
     postStimSecs = 0;
+end
+if nargin < 5 || isnan(latencySec)
+    latencySec = 0.038;
+    % latencySec = 0.08;
 end
 
 if isfield(Z{1}, 'Diodeval')
@@ -23,11 +27,8 @@ if isfield(Z{1}, 'Diodeval')
 else
     startTimes = cellfun(@(z) z.stimstart, Z, 'uni', 0);
 end
-
 keepTrialCode = 150;
 trialLengthSec = 2;
-% latencySec = 0.08;
-latencySec = 0.038;
 
 ntrials = numel(Z);
 nchannels = size(Z{1}.channels, 1);

@@ -15,7 +15,7 @@
 fnm = 'SY20151119JayMovie0001_trialinfo.mat'; % sparse, coarse
 stimdir = 'stim_mats_20151119';
 
-[Z, XA, M] = io.loadTrialsAndStimuli(['exps/' fnm], ...
+[Z, XA, M] = io.loadTrialsAndStimuli(['data/exps/' fnm], ...
     ['data/' stimdir]);
 
 %% load spike counts per stimulus pulse
@@ -34,9 +34,11 @@ keepRepeats = true;
 % curCond = 'gauss'; curGrid = 'cGrid';
 % curCond = 'hCont'; curGrid = 'cGrid';
 % curCond = 'ica'; curGrid = 'fGrid1';
-curCond = 'sps'; curGrid = 'cGrid';
-[Z2, X02, Y02, ix] = io.filterTrials(Z, X0, Y0, curCond, curGrid, ...
-    keepRepeats);
+% curCond = 'sps'; curGrid = 'cGrid';
+% [Z2, X02, Y02, ix] = io.filterTrials(Z, X0, Y0, curCond, curGrid, ...
+%     keepRepeats);
+
+[ix2, Z2, X02, Y02] = io.filterTrials(Z, keepRepeats, '', '', X0, Y0);
 X = X02(1:end,:)'; % now: ntrials x nd
 Y = Y02(1:end,:)'; % now: ntrials x ncells
 
@@ -56,8 +58,8 @@ rfBounds = [-100 300; 100 -300];
 % rfBounds = [-5 30; 5 -30];
 stimCenter = [Z{1}.centerx Z{1}.centery];
 nd = sqrt(size(X,2));
-npixels = 128;
-stimLoc = tools.stimCoords(stimCenter, nd, npixels);
+pixelsPerElem = io.inferPixelRepeats('cGrid');
+stimLoc = tools.stimCoords(stimCenter, nd, pixelsPerElem);
 [Xc, stimLoc] = tools.shrinkStim(X, rfBounds, stimLoc);
 
 %% fit
@@ -80,7 +82,11 @@ D = asd.sqdist.space(Xxy);
 
 %%
 
-cellind = 21;
+[objs, scs] = ft.allCells(X, Y, 'ridge');
+
+%%
+
+cellind = 22;
 Xxy = tools.cartesianProductSquare([1:nd; 1:nd]);
 D = asd.sqdist.space(Xxy);
 % Xa = X; Xa(Xa<0) = 0;
@@ -88,7 +94,7 @@ Xa = X;
 % objASD = evaluateLinearModel(Xa, Y(:,cellind), D, 'ASD');
 % objR = evaluateLinearModel(Xa, Y(:,cellind), D, 'ridge');
 objML = evaluateLinearModel(Xa, Y(:,cellind), D, 'ridge');
-objML = (Xa'*Xa + 1e-3*eye(size(Xa,2)))\(Xa'*Y(:,cellind));
+% objML = (Xa'*Xa + 1e-3*eye(size(Xa,2)))\(Xa'*Y(:,cellind));
 % RFC = plotRF_meanCounts(X,Y(:,cellind),stimLoc);
 
 %%

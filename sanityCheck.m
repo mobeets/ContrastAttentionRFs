@@ -1,24 +1,6 @@
 %% example PSTHs
 
-[Yr, xs0] = io.loadSpikeTimes(Z, 200, -1, 1);
-Ymean = squeeze(mean(Yr,2));
-
-%%
-
-% 48, 53, 77
-figure; hold on;
-for ii = 77%size(Ymean,1)
-    ym = Ymean(ii,:);
-%     plot(xs0, ym./max(ym));
-    plot(xs0, ym./mean(ym(1:10)));
-    yl = ylim;
-    
-    hold on;
-    for jj = 0:0.1:2
-        plot([jj jj], [0 5], 'Color', [0.8 0.8 0.8]);
-    end
-    ylim(yl);
-end
+[Ymean, Yr, xs0] = plot.psth(Z, 22, 0.038); % 48, 53, 77
 
 %% example spike counts
 
@@ -45,10 +27,8 @@ end
 
 %%
 
-%%
-
-for ii = 1:10%size(Y,2)
-    plotRF_meanCounts(X,Y(:,ii), stimLoc);
+for ii = 20%size(Y,2)
+    plot.rfMeanCounts(X, Y(:,ii), stimLoc);
     pause(0.5);
     if mod(ii,10) == 0
         close all;

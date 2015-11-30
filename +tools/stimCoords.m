@@ -1,9 +1,11 @@
-function stimLoc = stimCoords(stimCenter, nd, npixels)
+function stimLoc = stimCoords(stimCenter, nd, pixelsPerElem)
 % stimCenter = [Z{1}.centerx Z{1}.centery];
 % nd = 32;
-% npixels = 128;
+% pixelsPerElem = 4; % fine; 8 would be coarse
+% npixels = 128; % 128 = 4*32
 % 
 
+npixels = nd*pixelsPerElem;
 centerx = stimCenter(1);
 centery = stimCenter(2);
 stimRect = [centerx-npixels/2 centerx+npixels/2; ...

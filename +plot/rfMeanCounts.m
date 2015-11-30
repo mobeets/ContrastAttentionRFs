@@ -1,6 +1,9 @@
-function RF = plotRF_meanCounts(X,Y,stimLoc)
+function RF = rfMeanCounts(X, Y, stimLoc)
 
 nd = sqrt(size(X,2));
+if nargin < 3
+    stimLoc = [1:nd; 1:nd];
+end
 
 Xt = X; Xt(Xt<0) = 0;
 inds = Xt*(1:nd^2)';

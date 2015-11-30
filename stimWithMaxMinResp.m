@@ -1,19 +1,6 @@
 %% find cell with maximum spike count modulation from median
 
-% Y = YGauss;
-prcs = [20 50 80];
-Yprc = prctile(Y, prcs, 1);
-
-
-Yprc = Yprc';
-figure;
-plot(sortrows(Yprc, 2));
-[(1:96)' Yprc(:,3)-Yprc(:,1)]
-figure; hist(Yprc(:,3)-Yprc(:,1));
-% tmp = diff(Yprc')';
-% modl = tmp(:,2)./Yprc(:,2);
-% [~,ix] = max(modl(~isinf(modl)))
-% cellind = ix;
+plot.spikeCountPrcs(Y);
 
 %%
 
