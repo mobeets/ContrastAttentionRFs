@@ -23,11 +23,12 @@ if nargin < 4
     for ii = 1:numel(suffixes)
         suff = suffixes{ii};
         nr = io.inferPixelRepeats(suff, fnm);
-%         if false %strcmpi(suff(1:3), 'ica')
-%             fieldnm = 'ica_mixers';
-%         else
-%             fieldnm = 'mov';
-%         end
+        if strcmpi(suff(1:3), 'ica')
+            fieldnm = 'ica_mixers';
+            warning('Loading ica_mixers.');
+        else
+            fieldnm = 'mov';
+        end
         M.(suff) = io.loadStimulusMovies(stimdir, suff, nan, nr, fieldnm);
     end
 end
@@ -56,8 +57,19 @@ if any(isnan(X(:)))
     X = X(:,~ixBad,:);
     Z = Z(~ixBad);
 end
-
 X = X - 128; % center around mean-gray
-X = io.discretizeStimIfBinary(X);
+
+% discretize if no more than 3 unique vals within a condition
+unx = numel(unique(X(:)));
+if unx < 10
+    warning(['quickly binarizing; ' num2str(unx) ' unique vals.']);
+    X(X<0) = -1;
+    X(X>0) = 1;
+end
+% super slow:
+% X = permute(X, [2 1 3]);
+% conds = io.stimulusCondGroup(Z);
+% X = io.discretizeStimIfBinary(X, conds);
+% X = permute(X, [2 1 3]);
 
 end

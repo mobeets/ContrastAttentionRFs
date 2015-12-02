@@ -1,34 +1,48 @@
 TO DO:
-    * consider fitting 1024 datasets in 4 blocks
-    * consider using ICA even on non-ICA stimuli
-    * check SY20151112JayMovie0001 values
-    * refit SY20151029JayMovie0001 with ridge
-    * why is latency on SY20151119JayMovie0001 so short?
-    * bootstrap SY20151119JayMovie0001 with varying numbers of trials and see what the minimum number is that you need to get a certain proportion of fits above rsq=0
+    - [x] check SY20151112JayMovie0001 values
+    - [x] refit SY20151029JayMovie0001 with ridge
+    - [ ] consider fitting 1024 datasets in 4 blocks
+    - [ ] consider using ICA even on non-ICA (non-binary) stimuli
+    - [ ] why is latency on SY20151119JayMovie0001 so short?
+    - [ ] bootstrap SY20151119JayMovie0001 with varying numbers of trials and see what the minimum number is that you need to get a certain proportion of fits above rsq=0
+    - [ ] handle varying numbers of latency
 
 sy20151007mapJay0001 (IGNORE: no "TrialInfo" field)
 
 sy20151007mapJay0002
+    - binary: true
     - conditions: high/low contrast + coarse grid
     - latency: 0.088
     - trials: 4997
     - free params: 144
     - good-fits: 16/96
         - max score: cell 50 rsq=0.17
-    - good-fits (hCont only): 15/96
+        - RF is single pixel (since grid is so large?)
+    - good-fits-hCont: 15/96
         - max score: cell 50 rsq=0.27
         - this trend holds for all 15 cells, that the hCont score is better
-    - good-fits (lCont only): 3/96
+    - good-fits-lCont: 3/96
         - max score: cell 29 rsq=0.04
 
 SY20151029JayMovie0001
+    - binary: true
     - conditions: high/low contrast + fine grid
-    - latency: 0.088
+    - latency: 0.10
     - trials: 4000
     - free params: 1024
-    - good-fits: _/96
+    - good-fits: 0/96
+    - good-fits-grid: 8/96
+        - all good fits were in first quadrant
+        - cells: [22 24 27 29 43 59 62 65]
+        - cell 59 rsq=0.07
+            - RF takes up 1 pixel, maybe some spread to immediately adjacent pixels
+    - good-fits-grid-hCont: 2/96
+        - cells: [24 59]
+        - rsq=0.05, 0.09 respectively
+            - cell 24 RF has 4 pixels--2 black on top of 2 white
 
 SY20151030JayMovie0002
+    - binary: false
     - conditions: gauss + fine grid (n.b. called "coarse" erroneously)
     - latency: 0.088
     - trials: 8000
@@ -36,14 +50,21 @@ SY20151030JayMovie0002
     - good-fits: 0/96
 
 SY20151030JayMovie0001
+    - binary: true
     - conditions: high/low contrast + fine grid
-    - latency: 0.088
-    - trials: 5000
+    - latency: 0.10
+    - trials: 5508
     - free params: 1024
     - good-fits: 1/96
         - cell 41 rsq=0.2853; RF is totally uninterpretable
+    - good-fits-grid: 3/96
+        - grid1: [24 59 62], highest score is 59 with rsq=0.03
+    - good-fits-grid1-hCont: 3/96
+        - grid1: [12 24 59], highest score is 59 with rsq=0.11
+        - RFs are as on SY20151029JayMovie0001 but 59 maybe a bit bigger
 
 SY20151112JayMovie0001
+    - binary: false
     - conditions: ICA
     - latency: 0.088
         - n.b. I loaded 'ICA_16.mat' instead of using 'ica_mov' field; regressed on X*pinv(A'); not sure how this will affect fits...should probably try out the 'ica_mov' values
@@ -53,6 +74,7 @@ SY20151112JayMovie0001
         - cell 95 rsq=0.05; RF is broad and Gaussian-looking
 
 SY20151118JayMovie0002
+    - binary: true
     - conditions: sparse stimuli + fine grid
     - latency: 0.088
     - trials: 7000
@@ -60,6 +82,7 @@ SY20151118JayMovie0002
     - good-fits: 0/96
 
 SY20151119JayMovie0001
+    - binary: true
     - conditions: sparse stimuli + coarse grid
     - latency: 0.038
     - trials: 8100
