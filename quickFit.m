@@ -1,12 +1,12 @@
 %% load
 
 fnms = io.getFilenames();
-fnm = fnms{end-2}
+fnm = fnms{3}
 [ZA, XA, M] = io.loadTrialsAndStimuli(fnm);
 
 %% find best latency
 
-latencySecs = 0.088;% + 0.05;
+latencySecs = 0.1;% + 0.05;
 [Ymean, Yr, xs0] = plot.psth(ZA, [77 95], latencySecs);
 % [Ymean, Yr, xs0] = plot.psth(ZA, 77, latencySecs, xs0, Ymean);
 
@@ -26,7 +26,19 @@ keepRepeats = true;
 X = XB(1:end,:)';
 Y = YB(1:end,:)';
 
-%% fit
+%% fit substims
+
+nd = sqrt(size(X,2));
+[Xs, ixs] = io.stim2stims(X, nd/2);
+objs = cell(numel(Xs),1);
+scs = nan(numel(Xs), size(Y,2));
+for ii = 1:numel(Xs)
+    [obs, ss] = ft.allCells(Xs{ii}, Y, 'ridge', nan);
+    objs{ii} = obs;
+    scs(ii,:) = ss;
+end
+
+%% fit stim
 
 [objs, scs] = ft.allCells(X, Y, 'ridge', nan);
 % [~, fnm0] = fileparts(fnm);

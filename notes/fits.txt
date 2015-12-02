@@ -2,9 +2,9 @@ TO DO:
     * consider fitting 1024 datasets in 4 blocks
     * consider using ICA even on non-ICA stimuli
     * check SY20151112JayMovie0001 values
-    * why is latency on SY20151119JayMovie0001 so short?
     * refit SY20151029JayMovie0001 with ridge
-    * bootstrap SY20151119JayMovie0001 # of trials and see what the minimum number is that you need to get a certain proportion of fits above rsq=0
+    * why is latency on SY20151119JayMovie0001 so short?
+    * bootstrap SY20151119JayMovie0001 with varying numbers of trials and see what the minimum number is that you need to get a certain proportion of fits above rsq=0
 
 sy20151007mapJay0001 (IGNORE: no "TrialInfo" field)
 
