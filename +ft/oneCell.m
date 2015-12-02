@@ -1,4 +1,4 @@
-function obj = evaluateLinearModel(X, Y, D, fitType)
+function obj = oneCell(X, Y, D, fitType)
 % X - [nt x nw] - stimulus
 % Y - [nt x 1] - spikes
 % 
@@ -12,13 +12,12 @@ obj.nfolds = 10;
 obj.isLinReg = strcmpi(obj.llstr, 'gauss');
 scoreObj = reg.getScoreObj(obj.isLinReg);
 
-switch fitType
-    case 'ML'
-        obj = reg.getObj_ML(X, Y, obj); % ML
-    case 'ridge'
-        obj = reg.getObj_ML_Ridge(X, Y, scoreObj, obj); % ML + Ridge
-    case 'ASD'
-        obj = reg.getObj_ASD(X, Y, D, scoreObj, obj);
+if strcmpi(fitType, 'ML')
+    obj = reg.getObj_ML(X, Y, obj);
+elseif strcmpi(fitType, 'Ridge')
+    obj = reg.getObj_ML_Ridge(X, Y, scoreObj, obj);
+elseif strcmpi(fitType, 'ASD')
+    obj = reg.getObj_ASD(X, Y, D, scoreObj, obj);
 end
 
 obj = reg.fitAndScore(X, Y, obj, scoreObj);

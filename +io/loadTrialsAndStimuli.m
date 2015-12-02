@@ -22,7 +22,7 @@ if nargin < 4
     suffixes = unique(cellfun(@(z) z.movieprefix(9:end-1), Z, 'uni', 0));
     for ii = 1:numel(suffixes)
         suff = suffixes{ii};
-        nr = io.inferPixelRepeats(suff);
+        nr = io.inferPixelRepeats(suff, fnm);
 %         if false %strcmpi(suff(1:3), 'ica')
 %             fieldnm = 'ica_mixers';
 %         else
@@ -58,15 +58,6 @@ if any(isnan(X(:)))
 end
 
 X = X - 128; % center around mean-gray
-
-uns = unique(X(:));
-if numel(uns) == 3
-    disp('binary-izing');
-    nvals = sort(uns);
-    assert(nvals(2)==0);
-    X(X == nvals(1)) = -1;
-    X(X == nvals(2)) = 0;
-    X(X == nvals(3)) = 1;
-end
+X = io.discretizeStimIfBinary(X);
 
 end

@@ -1,4 +1,4 @@
-function [objs, scs] = allCells(X, Y, fitNm, D, cellinds, verbose)
+function [objs, scs] = allCells(X, Y, fitNm, D, cellinds)
 if nargin < 5
     cellinds = 1:size(Y,2);
 end
@@ -8,7 +8,11 @@ end
 if nargin < 3
     fitNm = 'ML';
 end
-verbose = true;
+if isnan(D) && strcmpi(fitNm, 'asd')
+    nd = sqrt(size(X,2));
+    Xxy = tools.cartesianProductSquare([1:nd; 1:nd]);
+    D = asd.sqdist.space(Xxy);
+end
 c = 0; maxmsgs = 5;
 
 objs = cell(size(Y,2),1);

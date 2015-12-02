@@ -1,24 +1,67 @@
-sy20151007mapJay0001
+TO DO:
+    * consider fitting 1024 datasets in 4 blocks
+    * consider using ICA even on non-ICA stimuli
+    * check SY20151112JayMovie0001 values
+    * why is latency on SY20151119JayMovie0001 so short?
+    * refit SY20151029JayMovie0001 with ridge
+    * bootstrap SY20151119JayMovie0001 # of trials and see what the minimum number is that you need to get a certain proportion of fits above rsq=0
+
+sy20151007mapJay0001 (IGNORE: no "TrialInfo" field)
+
 sy20151007mapJay0002
+    - conditions: high/low contrast + coarse grid
+    - latency: 0.088
+    - trials: 4997
+    - free params: 144
+    - good-fits: 16/96
+        - max score: cell 50 rsq=0.17
+    - good-fits (hCont only): 15/96
+        - max score: cell 50 rsq=0.27
+        - this trend holds for all 15 cells, that the hCont score is better
+    - good-fits (lCont only): 3/96
+        - max score: cell 29 rsq=0.04
+
 SY20151029JayMovie0001
+    - conditions: high/low contrast + fine grid
+    - latency: 0.088
+    - trials: 4000
+    - free params: 1024
+    - good-fits: _/96
+
 SY20151030JayMovie0002
+    - conditions: gauss + fine grid (n.b. called "coarse" erroneously)
+    - latency: 0.088
+    - trials: 8000
+    - free params: 1024
+    - good-fits: 0/96
+
 SY20151030JayMovie0001
     - conditions: high/low contrast + fine grid
     - latency: 0.088
-    - trials: only 5k, but 1024 free params
+    - trials: 5000
+    - free params: 1024
+    - good-fits: 1/96
+        - cell 41 rsq=0.2853; RF is totally uninterpretable
+
 SY20151112JayMovie0001
     - conditions: ICA
     - latency: 0.088
         - n.b. I loaded 'ICA_16.mat' instead of using 'ica_mov' field; regressed on X*pinv(A'); not sure how this will affect fits...should probably try out the 'ica_mov' values
-    - fits: 1/96 had rsq above 0
-        - cell 95: rsq=0.05 and RF is broad and Gaussian-looking
+    - trials: 7828
+    - free params: 256 OR 160 (if you use mixing values)
+    - good-fits: 1/96
+        - cell 95 rsq=0.05; RF is broad and Gaussian-looking
+
 SY20151118JayMovie0002
     - conditions: sparse stimuli + fine grid
     - latency: 0.088
-    - trials: not that many trials (~7k), but with 1024 free params
-    - fits: no fits had rsq above 0
+    - trials: 7000
+    - free params: 1024
+    - good-fits: 0/96
+
 SY20151119JayMovie0001
     - conditions: sparse stimuli + coarse grid
     - latency: 0.038
     - trials: 8100
-    - fits: 61/96 have rsq above 0
+    - free params: 256
+    - good-fits: 61/96

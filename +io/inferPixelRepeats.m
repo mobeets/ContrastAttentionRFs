@@ -1,4 +1,4 @@
-function nr = inferPixelRepeats(suff)
+function nr = inferPixelRepeats(suff, fnm)
 
 % nrmap = {'lCont_cGrid', 'hCont_cGrid', ...
 %     'lCont_fGrid', 'hCont_fGrid', 'gauss_cGrid', 'ica_fGrid1', ...
@@ -13,6 +13,9 @@ elseif ~isempty(strfind(suff, 'fGrid'))
     nr = 4;
 else
     error(['Could not interpret suffix "' suff '".']);
+end
+if ~isempty(strfind(fnm, '20151007'))
+    nr = 16; % extra coarse!
 end
 
 end
