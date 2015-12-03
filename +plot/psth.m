@@ -7,7 +7,6 @@ if nargin < 4
     Ymean = squeeze(mean(Yr,2));
 end
 
-figure;
 for ii = cellinds
     ym = Ymean(ii,:);
     plot(xs0, ym./mean(ym(1:10)));

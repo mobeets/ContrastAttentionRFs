@@ -1,11 +1,3 @@
-TO DO:
-    - [x] check SY20151112JayMovie0001 values
-    - [x] refit SY20151029JayMovie0001 with ridge
-    - [ ] consider fitting 1024 datasets in 4 blocks
-    - [ ] consider using ICA even on non-ICA (non-binary) stimuli
-    - [ ] why is latency on SY20151119JayMovie0001 so short?
-    - [ ] bootstrap SY20151119JayMovie0001 with varying numbers of trials and see what the minimum number is that you need to get a certain proportion of fits above rsq=0
-    - [ ] handle varying numbers of latency
 
 sy20151007mapJay0001 (IGNORE: no "TrialInfo" field)
 
@@ -84,7 +76,9 @@ SY20151118JayMovie0002
 SY20151119JayMovie0001
     - binary: true
     - conditions: sparse stimuli + coarse grid
-    - latency: 0.038
+    - latency: 0.0 (formerly 0.038)
     - trials: 8100
     - free params: 256
-    - good-fits: 61/96
+    - good-fits: 45-61/96
+        - cell 1 rsq=0.38; RF is huge and smooth blob, with flanking black
+        - cells 49 and 77 both have rsq>0.36 also

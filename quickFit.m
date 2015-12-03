@@ -1,12 +1,18 @@
 %% load
 
 fnms = io.getFilenames();
-fnm = fnms{end-2}
+fnm = fnms{end}
 [ZA, XA, M] = io.loadTrialsAndStimuli(fnm);
 
 %% find best latency
 
-[latencySecs, Ymean, xs0] = optLatency(ZA, cellind, 0.08);
+close all;
+cellinds = [77 95];
+nBinsStim = 400;
+% [Yr, xs0] = io.loadSpikeTimes(ZA, nBinsStim, -0.2, 0.2, 0);
+[latencySecs, dSecsAll] = tools.optLatency(ZA, 1:96, nBinsStim, ...
+    Yr, xs0);
+figure; hist(dSecsAll);
 % latencySecs = 0.08;% + 0.05;
 % [Ymean, Yr, xs0] = plot.psth(ZA, [77 95], latencySecs);
 % [Ymean, Yr, xs0] = plot.psth(ZA, 77, latencySecs, xs0, Ymean);
@@ -41,14 +47,14 @@ end
 
 %% fit stim
 
-[objs, scs] = ft.allCells(X, Y, 'ridge', nan, [41]);
+[objs, scs] = ft.allCells(X, Y, 'ridge', nan);
 % [~, fnm0] = fileparts(fnm);
 % save(fullfile('data', 'fits', [fnm0(3:10) '.mat']), 'objs', 'scs');
 
 %% visualize one
 
 figure; colormap gray;
-w = objs{1}{59}.w;
+w = objs{77}.w;
 nd = sqrt(numel(w));
 imagesc(reshape(w, nd, nd));
         

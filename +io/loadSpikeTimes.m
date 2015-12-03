@@ -20,7 +20,7 @@ if nargin < 5 || isnan(latencySec)
     latencySec = 0.038;
     % latencySec = 0.08;
 end
-
+latencySec
 if isfield(Z{1}, 'Diodeval')
     startTimes = cellfun(@(z) find(z.Diodeval > 500, 1)/30000, ...
         Z, 'uni', 0);
