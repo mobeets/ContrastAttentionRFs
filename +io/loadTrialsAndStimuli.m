@@ -23,12 +23,13 @@ if nargin < 4
     for ii = 1:numel(suffixes)
         suff = suffixes{ii};
         nr = io.inferPixelRepeats(suff, fnm);
-        if strcmpi(suff(1:3), 'ica')
-            fieldnm = 'ica_mixers';
-            warning('Loading ica_mixers.');
-        else
-            fieldnm = 'mov';
-        end
+%         if strcmpi(suff(1:3), 'ica')
+%             fieldnm = 'ica_mixers';
+%             nr = 1;
+%             warning('Loading ica_mixers.');
+%         else
+%             fieldnm = 'mov';
+%         end
         M.(suff) = io.loadStimulusMovies(stimdir, suff, nan, nr, fieldnm);
     end
 end

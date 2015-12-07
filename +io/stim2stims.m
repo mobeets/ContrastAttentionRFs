@@ -1,6 +1,7 @@
 function [Xs, ixs] = stim2stims(X, nd)
 % returns the 2d stimulus X into sub-stimuli
 %   where columns of X correspond to locations along 2d grid
+%   n.b. sub-stimuli will overlap somewhat
 % 
 
 nd0 = sqrt(size(X,2));
@@ -10,12 +11,10 @@ end
 
 % get grid corners
 inds = reshape(1:size(X,2), nd0, nd0);
-[xx,yy] = meshgrid(1:nd:nd0);
+xinds = 1:nd:nd0;
+xinds = [xinds nd0/2 - nd/2 + 1]; % add center
+[xx,yy] = meshgrid(xinds);
 starts = [xx(:) yy(:)];
-
-% add central grid
-mdp = nd0/2 - nd/2 + 1;
-starts = [starts; mdp mdp];
 
 % get grid indices and submatrices
 Xs = cell(size(starts,1),1);

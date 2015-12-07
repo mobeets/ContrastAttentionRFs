@@ -1,4 +1,4 @@
-function [dSecs, dSecsAll] = optLatency(Z, cellinds, ...
+function [dSecs, dSecsAll, vs, inds, xs0] = optLatency(Z, cellinds, ...
     nBinsStim, Yr, xs0)
 if nargin < 3
     nBinsStim = 400;
@@ -12,7 +12,7 @@ figure;
 plot.psth(Z, cellinds, 0, xs0, Ymean);
 
 i0 = find(xs0 == 0);
-inds = -20:20;
+inds = -10:25;
 
 vs = nan(numel(inds), numel(cellinds));
 for jj = 1:numel(cellinds)
@@ -33,7 +33,13 @@ for ii = 1:numel(cellinds)
     
     % method 2: only consider inds >= 0, and pick last ind before vs rises
     idxs = inds((diff(vs(:,ii)) > 0) & (inds(1:end-1)' >= 0));
+    
     idx = idxs(1);
+    
+    % backup options    
+    ix_nxt = (diff(idxs) > 1);
+    idxs = idxs(2:end);
+    idx_nxt = idxs(ix_nxt);
     
     x0 = xs0(i0 + idx);
     dSecsAll(ii) = x0;

@@ -4,7 +4,7 @@ sy20151007mapJay0001 (IGNORE: no "TrialInfo" field)
 sy20151007mapJay0002
     - binary: true
     - conditions: high/low contrast + coarse grid
-    - latency: 0.088
+    - latency: 0.09
     - trials: 4997
     - free params: 144
     - good-fits: 16/96
@@ -59,11 +59,15 @@ SY20151112JayMovie0001
     - binary: false
     - conditions: ICA
     - latency: 0.088
-        - n.b. I loaded 'ICA_16.mat' instead of using 'ica_mov' field; regressed on X*pinv(A'); not sure how this will affect fits...should probably try out the 'ica_mov' values
     - trials: 7828
-    - free params: 256 OR 160 (if you use mixing values)
+    - free params: 256
     - good-fits: 1/96
         - cell 95 rsq=0.05; RF is broad and Gaussian-looking
+        - n.b. I loaded 'ICA_16.mat' instead of using 'ica_mov' field; regressed on X*pinv(A'); not sure how this will affect fits...should probably try out the 'ica_mov' values
+    - good-fits-ica_mov: 1/96
+        - cell 95 rsq=0.05; RF is broad and ellipse or cloud-like
+        - tried Ridge and ARD
+        - n.b. tried suggested latency of 0.0 and NO fits were good
 
 SY20151118JayMovie0002
     - binary: true

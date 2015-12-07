@@ -15,7 +15,14 @@ scoreObj = reg.getScoreObj(obj.isLinReg);
 if strcmpi(fitType, 'ML')
     obj = reg.getObj_ML(X, Y, obj);
 elseif strcmpi(fitType, 'Ridge')
+    objML = ft.oneCell(X, Y, D, 'ML');
+    obj.wML = objML.w;
     obj = reg.getObj_ML_Ridge(X, Y, scoreObj, obj);
+elseif strcmpi(fitType, 'ARD')    
+    objRdg = ft.oneCell(X, Y, D, 'Ridge');
+    obj.wML = objRdg.w;
+    obj.pRdg = objRdg.hyper;
+    obj = reg.getObj_ML_ARD(X, Y, scoreObj, obj);
 elseif strcmpi(fitType, 'ASD')
     obj = reg.getObj_ASD(X, Y, D, scoreObj, obj);
 end

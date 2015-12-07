@@ -9,7 +9,8 @@ end
 
 for ii = cellinds
     ym = Ymean(ii,:);
-    plot(xs0, ym./mean(ym(1:10)));
+%     ym = ym./mean(ym(1:10));
+    plot(xs0, ym);
     yl = ylim;
 
     hold on;
