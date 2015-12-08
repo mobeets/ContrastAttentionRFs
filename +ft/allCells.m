@@ -10,7 +10,7 @@ if nargin < 3
 end
 if isnan(D) && strcmpi(fitNm, 'asd')
     nd = sqrt(size(X,2));
-    Xxy = tools.cartesianProductSquare([1:nd; 1:nd]);
+    Xxy = tools.cartesianProduct({1:nd; 1:nd});
     D = asd.sqdist.space(Xxy);
 end
 c = 0; maxmsgs = 5;

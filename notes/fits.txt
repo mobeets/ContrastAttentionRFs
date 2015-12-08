@@ -54,6 +54,16 @@ SY20151030JayMovie0001
     - good-fits-grid1-hCont: 3/96
         - grid1: [12 24 59], highest score is 59 with rsq=0.11
         - RFs are as on SY20151029JayMovie0001 but 59 maybe a bit bigger
+    - good-fits-grid(8x8)-hCont: 15/96
+        - grid1, grid6 have the most; most in grid1
+        - cells 12, 24 do better here with 8x8; cell 59 does the same as with 16x16
+        - RFs are just one or two pixels    
+    - good-fits-grid(8x8)-hCont: 15/96
+        - only one grid, with starts=[4 4], nd=8
+    - good-fits-grid(8x8)-lCont: 5/96
+        - cells: [13 18 29 30 62]
+        - highest score is 18 with rsq=0.02
+        - RFs are just one or two pixels
 
 SY20151112JayMovie0001
     - binary: false
@@ -80,7 +90,7 @@ SY20151118JayMovie0002
 SY20151119JayMovie0001
     - binary: true
     - conditions: sparse stimuli + coarse grid
-    - latency: 0.0 (formerly 0.038)
+    - latency: 0.03 (formerly 0.038)
     - trials: 8100
     - free params: 256
     - good-fits: 45-61/96

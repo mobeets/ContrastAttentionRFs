@@ -1,7 +1,7 @@
 %% load
 
 fnms = io.getFilenames();
-fnm = fnms{3}
+fnm = fnms{end}
 [ZA, XA, M] = io.loadTrialsAndStimuli(fnm);
 % [ZA, XA, M] = io.loadTrialsAndStimuli(fnm, '', ZA);
 
@@ -9,18 +9,22 @@ fnm = fnms{3}
 
 close all;
 nBinsStim = 400;
+cellinds = [1 49 77];
 [Yr, xs0] = io.loadSpikeTimes(ZA, nBinsStim, -0.2, 0.2, 0);
 [latencySecs, dSecsAll, vs, inds, xs0] = tools.optLatency(ZA, ...
-    [12 24 59], nBinsStim, Yr, xs0);
+    cellinds, nBinsStim, Yr, xs0);
 % figure; hist(dSecsAll);
 % latencySecs = 0.08;% + 0.05;
-% [Ymean, Yr, xs0] = plot.psth(ZA, [59], 0);
+figure;
+plot.psth(ZA, cellinds, 0.03);
 % [Ymean, Yr, xs0] = plot.psth(ZA, 77, latencySecs, xs0, Ymean);
 
-%% load spikes and filter by condition
+%% load spikes with optimal latency
 
-latencySecs = 0.09;
+latencySecs = 0.03;
 YA = io.loadSpikeTimes(ZA, nan, nan, nan, latencySecs);
+
+%% filter by condition
 
 pulses = 3:20;
 X0 = XA(:,:,pulses);
@@ -37,25 +41,26 @@ Y = YB(1:end,:)';
 %% fit substims
 
 nd = sqrt(size(X,2));
-[Xs, ixs] = io.stim2stims(X, nd/2);
+% [Xs, ixs] = io.stim2stims(X, nd/2);
+[Xs, ixs] = io.stim2stims(X, 8, [4 4]);
 objs = cell(numel(Xs),1);
 scs = nan(numel(Xs), size(Y,2));
-for ii = 1%1:numel(Xs)
-    [obs, ss] = ft.allCells(Xs{ii}, Y, 'ridge', nan, [12 24 59]);
+for ii = 1%:numel(Xs)
+    [obs, ss] = ft.allCells(Xs{ii}, Y, 'ridge', nan);
     objs{ii} = obs;
     scs(ii,:) = ss;
 end
 
 %% fit stim
 
-[objs, scs] = ft.allCells(X, Y, 'ARD', nan, [95]);
+[objs, scs] = ft.allCells(X2, Y, 'ridge', nan);
 % [~, fnm0] = fileparts(fnm);
 % save(fullfile('data', 'fits', [fnm0(3:10) '.mat']), 'objs', 'scs');
 
 %% visualize one
 
 figure; colormap gray;
-w = A*objs{95}.w;
+w = objs{65}.w;
 nd = sqrt(numel(w));
 imagesc(reshape(w, nd, nd));
         

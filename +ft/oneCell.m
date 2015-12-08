@@ -15,8 +15,7 @@ scoreObj = reg.getScoreObj(obj.isLinReg);
 if strcmpi(fitType, 'ML')
     obj = reg.getObj_ML(X, Y, obj);
 elseif strcmpi(fitType, 'Ridge')
-    objML = ft.oneCell(X, Y, D, 'ML');
-    obj.wML = objML.w;
+    obj.wML = (X'*X + 1e-5*eye(size(X,2)))\(X'*(Y-mean(Y)));
     obj = reg.getObj_ML_Ridge(X, Y, scoreObj, obj);
 elseif strcmpi(fitType, 'ARD')    
     objRdg = ft.oneCell(X, Y, D, 'Ridge');
