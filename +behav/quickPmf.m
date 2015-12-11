@@ -13,7 +13,8 @@ function quickPmf(expnm)
     subplot(2,2,3);
     behav.plotPctCor2d(B, 'targx', 'targy');
     subplot(2,2,4);
-    behav.plotPctCor2d(B, 'targonset', 'TARGETTIMEON');
+    behav.plotPctCor2d(B, 'targonset', 'TARGETTIMEON', ...
+        'target onset (msec)', 'target duration (msec)');
     set(gcf, 'color', 'w');
 
 end
