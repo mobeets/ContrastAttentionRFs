@@ -36,7 +36,7 @@ SY20151029JayMovie0001
 SY20151030JayMovie0002
     - binary: false
     - conditions: gauss + fine grid (n.b. called "coarse" erroneously)
-    - latency: 0.088
+    - latency: 0.09
     - trials: 8000
     - free params: 1024
     - good-fits: 0/96
@@ -44,7 +44,7 @@ SY20151030JayMovie0002
 SY20151030JayMovie0001
     - binary: true
     - conditions: high/low contrast + fine grid
-    - latency: 0.10
+    - latency: 0.09
     - trials: 5508
     - free params: 1024
     - good-fits: 1/96
