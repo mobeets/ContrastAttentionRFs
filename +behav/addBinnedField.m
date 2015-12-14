@@ -11,7 +11,9 @@ function B = addBinnedField(B, xnm, ynm, nbins)
         grps((xs(ii) < conds) & (conds <= xs(ii+1))) = ii;
     end
 
-    grp = num2cell(xs(grps));
-    [B.(ynm)] = deal(grp{:});
+    B = tools.structArrayAppend(B, ynm, xs(grps));
+%     
+%     grp = num2cell(xs(grps));
+%     [B.(ynm)] = deal(grp{:});
 
 end

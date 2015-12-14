@@ -10,7 +10,7 @@ function B = loadBehav(expnm, expdir)
 
     exp = load(fullfile(expdir, [expnm '.mat']));
     B = tools.struct2structArray(exp.behav);
-
+    
     % outcomes:
     % 0: failed to achieve fixation
     % 1: correct
