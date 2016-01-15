@@ -1,5 +1,5 @@
 function plotPctCor1d(B, xnm, xlbl)
-    if nargin < 2
+    if nargin < 3
         xlbl = xnm;
     end
 
@@ -21,7 +21,7 @@ function plotPctCor1d(B, xnm, xlbl)
     errorbar(xs, prcs, 2*errs, '.');
     xlabel(xlbl);
     ylabel('% correct');
-    ylim([0.0 1.05]);
+    ylim([-0.05 1.05]);
     set(gca, 'FontSize', 14);
 
 end

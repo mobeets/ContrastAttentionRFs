@@ -10,10 +10,10 @@ function B = addBinnedField(B, xnm, ynm, nbins)
     for ii = 1:numel(xs)-1
         grps((xs(ii) < conds) & (conds <= xs(ii+1))) = ii;
     end
-
+    
+    % handle nans
+    xs = [xs nan];
+    grps(isnan(grps)) = numel(xs);
     B = tools.structArrayAppend(B, ynm, xs(grps));
-%     
-%     grp = num2cell(xs(grps));
-%     [B.(ynm)] = deal(grp{:});
 
 end
