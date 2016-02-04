@@ -1,7 +1,7 @@
 %% load
 
 fnms = io.getFilenames();
-fnm = fnms{end-4}
+fnm = fnms{end}
 [ZA, XA, M] = io.loadTrialsAndStimuli(fnm);
 % [ZA, XA, M] = io.loadTrialsAndStimuli(fnm, '', ZA);
 
@@ -22,7 +22,7 @@ latencySecs = 0.09;
 
 %% load spikes with optimal latency
 
-latencySecs = 0.09;
+latencySecs = 0.03;
 YA = io.loadSpikeTimes(ZA, nan, nan, nan, latencySecs);
 
 %% filter by condition
