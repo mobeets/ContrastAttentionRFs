@@ -23,9 +23,90 @@ nrm = @(y1, y2) norm(y1-y2);
 [C,IA,IC] = unique(X, 'rows');
 cs = sort(unique(IC));
 
+%% stim locs
+
+nd = 16;
+locs = nan(size(X,1), 2);
+for ii = 1:size(X,1)
+    [ix,iy] = find(reshape(X(ii,:), nd, nd) > 0);
+    locs(ii,:) = [ix iy];
+end
+
+%% gather noise and signal norms
+
+distf = @(ix, iy) norm(locs(ix,:) - locs(iy,:));
+nsamps = 20;
+nses = cell(nd,nd);
+sigs = cell(nd,nd);
+dists = cell(nd,nd);
+pos = cell(nd,nd);
+pos0 = cell(nd,nd);
+
+for ix = 1:nd
+    for iy = 1:nd
+        ix1 = (locs(:,1) == ix & locs(:,2) == iy);
+        ix2 = (locs(:,1) ~= ix & locs(:,2) ~= iy);
+        vsNse = signse.pairwiseNorms(Y(ix1,:), nrm);
+        ix0 = ~isnan(vsNse);
+        nses{ix,iy} = vsNse(ix0);
+        pos0{ix,iy} = sub2ind([nd nd], ix, iy)*ones(size(vsNse(ix0)));
+        
+        [vsSig, ais, bis] = signse.pairwiseGroups(Y(ix1,:), Y(ix2,:), ...
+            nrm, nsamps);
+        inds1 = 1:size(Y,1); inds1 = inds1(ix1);
+        inds2 = 1:size(Y,1); inds2 = inds2(ix2);
+        
+        ix0 = ~isnan(vsSig);
+        sigs{ix,iy} = vsSig(ix0);
+        ais = ais(ix0);
+        bis = bis(ix0);
+        
+        ds = arrayfun(@(ii) distf(inds1(ais(ii)), inds2(bis(ii))), ...
+            1:numel(ais));
+        if isempty(ds)
+            ds = [];
+        end
+        dists{ix,iy} = ds;
+        pos{ix,iy} = sub2ind([nd nd], ix, iy)*ones(size(ds));        
+    end
+end
+
+xs = cell2mat(nses(:));
+ys = cell2mat(sigs(:));
+ds = [dists{:}]';
+ps = [pos{:}]';
+ps0 = cell2mat(pos0(:));
+
+%% plot norm as a function of distance
+
+ds0 = [ds; zeros(size(xs))];
+ys0 = [ys; xs];
+ps0 = [ps; ps0];
+% ps0 = [ps; zeros(size(xs))];
+
+% show only data including stimuli upper left
+[xx,yy] = meshgrid(1:6, 1:6);
+inds1 = sub2ind([nd nd], xx(:), yy(:));
+ix = ismember(ps0, inds1);
+ds0 = ds0(ix);
+ys0 = ys0(ix);
+ps0 = ps0(ix);
+
+[ds0, ix] = sort(ds0);
+ys0 = ys0(ix);
+
+figure; box off; set(gcf, 'color', 'w');
+hold on; set(gca, 'FontSize', 14);
+plot(ds0, ys0, '.');
+plot(ds0, smooth(ds0, ys0), '-', 'LineWidth', 3); % basically mean per ds
+
+xlabel('stimulus distance');
+ylabel('distance of population responses');
+
 %% noise distribution
 
 vsNse = cell(numel(cs),1);
+vsNseInds = cell(numel(cs),1);
 for ii = 1:numel(cs)
     ix = (IC == cs(ii));
     Ys = Y(ix,:);
@@ -81,10 +162,10 @@ for ii = 1:numel(vsSig)
     v1c = vsNse{ii}; v2c = vsSig{ii};
     v1 = prctile(v1c, prcs);
     v2 = prctile(v2c, prcs);
-%     plot([v1(1) v1(3)], [v2(2) v2(2)], 'k-');
-%     plot([v1(2) v1(2)], [v2(1) v2(3)], 'k-');
+    plot([v1(1) v1(3)], [v2(2) v2(2)], 'k-');
+    plot([v1(2) v1(2)], [v2(1) v2(3)], 'k-');
     
-    plot([v1(2) v1(2)], [min(v2c) max(v2c)], 'k-');
+%     plot([v1(2) v1(2)], [min(v2c) max(v2c)], 'k-');
 end
 xlabel('median of norm of noise difference, per condition');
 ylabel('range of norm of signal difference, per condition');
@@ -98,8 +179,8 @@ axis square;
 nd = 16;
 cls = nan(numel(cs),2);
 for ii = 1:numel(cs)
-    inds = find(IC == cs(ii));
-    x = reshape(X(inds(1),:), nd, nd);
+    inds1 = find(IC == cs(ii));
+    x = reshape(X(inds1(1),:), nd, nd);
     [vx, vy] = find(x == 1); % index of cell with 1
     cls(ii,:) = [vx vy];
 end
