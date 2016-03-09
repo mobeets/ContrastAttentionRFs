@@ -31,10 +31,12 @@ end
 
 function outdir = getFullOutputDir(outdir)
     if ~ispref('contrastAttentionRFs', 'stimdir')
-        disp(' ');
-        disp('EXAMPLE: ');
-        disp('setpref(''contrastAttentionRFs'', ''stimdir'', ''/path/example'')');
-        error('You must set the base directory for stimuli using the example above.');
+        DEFAULT_DIR = fullfile(pwd, 'data');
+        warning(['No preferences for contrastAttentionRFs stimdir set.' ...
+            ' Will write stimulus folders to: ' DEFAULT_DIR ...
+            '. To change this, call: ' ...
+            'setpref(''contrastAttentionRFs'', ''stimdir'', ''/path/example'')' ]);
+        setpref('contrastAttentionRFs', 'stimdir', DEFAULT_DIR);
     else
         stimBaseDir = getpref('contrastAttentionRFs', 'stimdir');
     end
