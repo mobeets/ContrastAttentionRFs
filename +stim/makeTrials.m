@@ -15,14 +15,7 @@ function X = makeTrials(opts, outdir, prefix, expTiming)
         if ~isnan(opts.randSeed)
             rng(opts.randSeed);
         end
-    end
-
-    if expTiming
-        ts = stim.drawTruncExpStimLength(opts.t0, opts.t1, opts.tMean, ...
-            opts.ntrials);
-    else
-        ts = opts.trialLengthSec*ones(opts.ntrials, 1);
-    end
+    end    
 
     % create trials
     if isfield(opts, 'stimDist') && strcmpi(opts.stimDist, 'ica')
@@ -32,6 +25,12 @@ function X = makeTrials(opts, outdir, prefix, expTiming)
     elseif isfield(opts, 'stimDist') && strcmpi(opts.stimDist, 'natural')
         X = stim.makeTrial_natural(opts);
     else
+        if expTiming
+            ts = stim.drawTruncExpStimLength(opts.t0, opts.t1, ...
+                opts.tMean, opts.ntrials);
+        else
+            ts = opts.trialLengthSec*ones(opts.ntrials, 1);
+        end
         X = cell(opts.ntrials,1);
         for ii = 1:opts.ntrials    
             opts.npulses = round(ts(ii)*opts.pulsesPerSec);

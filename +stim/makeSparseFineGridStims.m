@@ -1,4 +1,6 @@
+%% set preferences
 
+% stimulus info
 ntrials = 100;
 trialLengthSec = 2.0;
 pulsesPerSec = 10;
@@ -8,25 +10,26 @@ pixelsPerElem = 4;
 stimContrast = 1.0;
 npulses = trialLengthSec*pulsesPerSec;
 stimDist = 'sparse';
+
+% output info
 prefix = 'sps_fGrid_';
+stimDirName = ['stim_mats_' datestr(now, 'yyyymmdd')];
+
+%% create and write stimuli
 
 optsSparseFineGrid = struct(...
     'randSeed', nan, ...
     'ntrials', ntrials, ...
-    'trialLengthSec', trialLengthSec, ...
-    'pulsesPerSec', pulsesPerSec, ...
-    'npulses', npulses, ...
+    'npulses', trialLengthSec*pulsesPerSec, ...
     'shape', [nrows ncols], ...
     'pixelsPerElem', pixelsPerElem, ...
     'stimContrast', stimContrast, ... % 0 <= contrast <= 1
     'stimOffset', 127.5, ... % mean gray level
     'stimDist', stimDist);
 
-stimdir = getpref('contrastAttentionRFs', 'stimdir');
-outdir = fullfile(stimdir, ['stim_mats_' datestr(now, 'yyyymmdd')]);
-X = stim.makeTrials(optsSparseFineGrid, outdir, prefix);
+X = stim.makeTrials(optsSparseFineGrid, stimDirName, prefix);
 
-%%
+%% view example trial
 
 if exist('doShow', 'var') && doShow
     figure;
@@ -36,5 +39,6 @@ if exist('doShow', 'var') && doShow
     end
 end
 
-% to load:
+%% load stimuli
+
 % [X, optsSparseFineGrid] = io.loadStimulusMovies(outdir, prefix);

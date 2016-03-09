@@ -6,6 +6,7 @@ function safeSave(X, S, opts, prefix, outdir)
     if ~exist(outdir, 'dir')
         mkdir(outdir);
     end
+    outdir = getFullOutputDir(outdir);
     
     askedOnce = false;
     for ii = 1:opts.ntrials
@@ -26,6 +27,18 @@ function safeSave(X, S, opts, prefix, outdir)
         end
     end
     disp(['Saved ' num2str(numel(X)) ' stimuli to ' outdir]);
+end
+
+function outdir = getFullOutputDir(outdir)
+    if ~ispref('contrastAttentionRFs', 'stimdir')
+        disp(' ');
+        disp('EXAMPLE: ');
+        disp('setpref(''contrastAttentionRFs'', ''stimdir'', ''/path/example'')');
+        error('You must set the base directory for stimuli using the example above.');
+    else
+        stimBaseDir = getpref('contrastAttentionRFs', 'stimdir');
+    end
+    outdir = fullfile(stimBaseDir, outdir);
 end
 
 function isOk = okayWithOverwrite(outdir)
